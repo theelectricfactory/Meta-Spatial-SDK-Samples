@@ -25,40 +25,42 @@ class GeneralSystem() : SystemBase() {
 
     override fun execute() {
 
+        val immA = ImmersiveActivity.getInstance()
+
         // Logo and Home Panel are shown when app starts
-        val appStarted = ImmersiveActivity.instance.get()?.appStarted
+        val appStarted = immA?.appStarted
         if (appStarted == false) {
             val currentTime = System.currentTimeMillis()
             val deltaTime = (currentTime - initTime) / 1000f
 
             val headPose: Pose = getHeadPose()
-            val logo = ImmersiveActivity.instance.get()?.logo
+            val logo = immA.logo
 
             // We wait for the tracking system to start, then app logo is shown for 5 seconds, followed by
             // home panel.
-            if (headPose.t != Vector3(0f) && logo?.getComponent<Visible>()?.isVisible == false) {
+            if (headPose.t != Vector3(0f) && !logo.getComponent<Visible>().isVisible) {
 
-                placeInFront(ImmersiveActivity.instance.get()?.logo, Vector3(0f, -0.1f, 0.9f))
-                ImmersiveActivity.instance.get()?.logo?.setComponent(Visible(true))
+                placeInFront(immA.logo, Vector3(0f, -0.1f, 0.9f))
+                immA.logo.setComponent(Visible(true))
                 initTime = System.currentTimeMillis()
 
             // We load the skybox later, to improve app performance
             } else if (deltaTime >= 1 &&
-                logo?.getComponent<Visible>()?.isVisible == true &&
+                logo.getComponent<Visible>()?.isVisible == true &&
                 !skyboxLoaded) {
 
                 skyboxLoaded = true
-                ImmersiveActivity.instance.get()?.createSkybox(R.drawable.skybox1)
+                immA.createSkybox(R.drawable.skybox1)
             // App is initialized after logo has been shown
             } else if (deltaTime >= 5 && skyboxLoaded) {
-                ImmersiveActivity.instance.get()?.initApp()
+                immA.initApp()
             }
 
         // If the ambient audio in On, we update the position vector of the ambientSoundPlayer with
         // the Speaker position
-        } else if (ImmersiveActivity.instance.get()?.speakerIsOn == true) {
-            val pos = ImmersiveActivity.instance.get()?.speaker!!.getComponent<Transform>().transform.t
-            ImmersiveActivity.instance.get()?.ambientSoundPlayer!!.setPosition(pos)
+        } else if (immA?.speakerIsOn == true) {
+            val pos = immA.speaker.getComponent<Transform>().transform.t
+            immA.ambientSoundPlayer.setPosition(pos)
         }
 
         // Toolbar can be called anytime with B or Y button of controllers
@@ -67,7 +69,7 @@ class GeneralSystem() : SystemBase() {
             val controller = entity.getComponent<Controller>()
             if ((controller.buttonState.inv() and controller.changedButtons and ButtonBits.ButtonB) != 0 ||
                 (controller.buttonState.inv() and controller.changedButtons and ButtonBits.ButtonY) != 0) {
-                    placeInFront(ImmersiveActivity.instance.get()?.toolbarPanel)
+                    placeInFront(immA?.toolbarPanel)
             }
         }
     }

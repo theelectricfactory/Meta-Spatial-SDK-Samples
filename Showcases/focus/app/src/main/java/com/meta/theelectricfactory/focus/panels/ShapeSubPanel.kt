@@ -31,7 +31,7 @@ import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 @Composable
 fun ShapeSubPanel() {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     return FocusTheme {
         Box(
@@ -53,12 +53,12 @@ fun ShapeSubPanel() {
                     color = LocalColorScheme.current.primaryButton,
                 )
 
-                ShapeButton( R.drawable.shape1, {immersiveActivity?.CreateShape(0)})
-                ShapeButton( R.drawable.shape2, {immersiveActivity?.CreateShape(1)})
-                ShapeButton( R.drawable.shape3, {immersiveActivity?.CreateShape(2)})
-                ShapeButton( R.drawable.shape4, {immersiveActivity?.CreateShape(3)})
-                ShapeButton( R.drawable.shape5, {immersiveActivity?.CreateShape(4)})
-                ShapeButton( R.drawable.shape6, {immersiveActivity?.CreateShape(5)})
+                ShapeButton( R.drawable.shape1, {immA?.CreateShape(0)})
+                ShapeButton( R.drawable.shape2, {immA?.CreateShape(1)})
+                ShapeButton( R.drawable.shape3, {immA?.CreateShape(2)})
+                ShapeButton( R.drawable.shape4, {immA?.CreateShape(3)})
+                ShapeButton( R.drawable.shape5, {immA?.CreateShape(4)})
+                ShapeButton( R.drawable.shape6, {immA?.CreateShape(5)})
             }
         }
     }

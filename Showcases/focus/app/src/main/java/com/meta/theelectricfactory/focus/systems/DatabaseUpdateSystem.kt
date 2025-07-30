@@ -17,13 +17,14 @@ class DatabaseUpdateSystem : SystemBase() {
     private var lastTime = System.currentTimeMillis()
 
     override fun execute() {
+        val immA = ImmersiveActivity.getInstance()
 
-        if (ImmersiveActivity.instance.get()?.appStarted == false) return
+        if (immA?.appStarted == false) return
 
         val currentTime = System.currentTimeMillis()
 
         // if there is no current project, we don't update database
-        if (ImmersiveActivity.instance.get()?.currentProject == null) {
+        if (immA?.currentProject == null) {
             lastTime = currentTime
         }
 
@@ -42,7 +43,7 @@ class DatabaseUpdateSystem : SystemBase() {
 
                 if (isGrabbed) {
                     if (asset.type != AssetType.TIMER)
-                        ImmersiveActivity.instance.get()?.DB?.updateAssetPose(asset.uuid, asset.type, pose)
+                        immA?.DB?.updateAssetPose(asset.uuid, asset.type, pose)
                 }
             }
 
@@ -54,7 +55,7 @@ class DatabaseUpdateSystem : SystemBase() {
                 val isGrabbed = entity.getComponent<Grabbable>().isGrabbed
 
                 if (isGrabbed)
-                    ImmersiveActivity.instance.get()?.DB?.updateUniqueAsset(uniqueAsset.uuid, pose)
+                    immA?.DB?.updateUniqueAsset(uniqueAsset.uuid, pose)
             }
         }
     }

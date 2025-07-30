@@ -45,7 +45,7 @@ class SpatialTask(
     mainTaskTitle: MutableState<String>? = null,
     mainTaskBody: MutableState<String>? = null
 ) {
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     init {
         var id = getDisposableID()
@@ -55,7 +55,7 @@ class SpatialTask(
             Entity.createPanelEntity(id, Transform(task.pose), Grabbable(true, GrabbableType.PIVOT_Y))
 
         // Register the panel
-        immersiveActivity?.registerPanel(
+        immA?.registerPanel(
             panelRegistration(id, 0.24f, 0.15f) {
                 FocusTheme {
                     Box(
@@ -96,10 +96,10 @@ class SpatialTask(
             if (!taskPanelEntity.hasComponent<TransformParent>() ||
                 (taskPanelEntity.hasComponent<TransformParent>() && taskPanelEntity.getComponent<TransformParent>().entity == Entity.nullEntity())) {
 
-                ImmersiveActivity.getInstance()?.linkToolsWithParentBoards(taskPanelEntity)
+                immA?.linkToolsWithParentBoards(taskPanelEntity)
             }
         }
 
-        if (new) immersiveActivity?.playCreationSound(taskPanelEntity.getComponent<Transform>().transform.t)
+        if (new) immA?.playCreationSound(taskPanelEntity.getComponent<Transform>().transform.t)
     }
 }

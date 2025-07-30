@@ -29,15 +29,16 @@ import com.meta.theelectricfactory.focus.utils.placeInFront
 
 // Class to create a Timer, composed by an entity with a Panel component and another entity with a Mesh component
 class Timer(totalTime: Int) {
+
+    val immA = ImmersiveActivity.getInstance()
+
     init {
         var id = getDisposableID()
         val _width = 0.18f
         val _height = 0.18f
         val _dp = 1150f
 
-        ImmersiveActivity.instance
-            .get()
-            ?.registerPanel(
+        immA?.registerPanel(
                 PanelRegistration(id) {
                     layoutResourceId = R.layout.timer_layout
                     config {
@@ -86,8 +87,6 @@ class Timer(totalTime: Int) {
         placeInFront(timerObj)
         // We add a listener to show delete button when entity is selected
         addDeleteButton(timerObj)
-        ImmersiveActivity.instance
-            .get()
-            ?.playCreationSound(timerObj.getComponent<Transform>().transform.t)
+        immA?.playCreationSound(timerObj.getComponent<Transform>().transform.t)
     }
 }

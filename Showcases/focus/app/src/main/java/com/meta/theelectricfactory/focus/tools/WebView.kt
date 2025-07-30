@@ -26,7 +26,7 @@ class WebView(
 ) {
 
     var id = getDisposableID()
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     // Create a grabbable entity with a Panel
     init {
@@ -38,9 +38,9 @@ class WebView(
         if (uuid == -1) {
             if (pose == Pose()) placeInFront(ent, bigPanel = true)
             uuid = getNewUUID()
-            immersiveActivity?.DB?.createToolAsset(
+            immA?.DB?.createToolAsset(
                 uuid,
-                immersiveActivity?.currentProject?.uuid,
+                immA?.currentProject?.uuid,
                 AssetType.WEB_VIEW,
                 url,
                 0f, // not relevant
@@ -50,7 +50,7 @@ class WebView(
         }
 
         // Register the panel
-        immersiveActivity?.registerPanel(
+        immA?.registerPanel(
             panelRegistration(id, 0.56f, 0.4f) { WebViewPanel(url, uuid, ent) }
         )
 

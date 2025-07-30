@@ -56,7 +56,7 @@ fun WebViewPanel(
     entity: Entity
 ) {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
     var urlInput = remember { mutableStateOf(url) }
     val webViewRef = remember { mutableStateOf<WebView?>(null) }
 
@@ -82,11 +82,11 @@ fun WebViewPanel(
                                 webViewRef.value?.let { webView ->
                                     if (webView.canGoBack()) {
                                         webView.goBack()
-                                        immersiveActivity?.DB?.updateWebViewURL(uuid, webView.originalUrl.toString())
+                                        immA?.DB?.updateWebViewURL(uuid, webView.originalUrl.toString())
                                         urlInput.value = webView.originalUrl.toString()
                                     } else if (urlInput.value != webView.url) {
                                         webView.loadUrl(urlInput.value)
-                                        immersiveActivity?.DB?.updateWebViewURL(uuid, urlInput.value)
+                                        immA?.DB?.updateWebViewURL(uuid, urlInput.value)
                                     }
                                 }
                             },
@@ -150,7 +150,7 @@ fun WebViewPanel(
                     ) {
                         SecondaryCircleButton(
                             onClick = {
-                                immersiveActivity?.DB?.deleteToolAsset(uuid)
+                                immA?.DB?.deleteToolAsset(uuid)
                                 entity.destroy()
                             },
                             icon = {
@@ -193,7 +193,7 @@ fun WebViewPanel(
 
                                         // Handle internal URL changes here
                                         val newUrl = request?.url.toString()
-                                        immersiveActivity?.DB?.updateWebViewURL(uuid, newUrl)
+                                        immA?.DB?.updateWebViewURL(uuid, newUrl)
                                         urlInput.value = newUrl
                                         return false
                                     }

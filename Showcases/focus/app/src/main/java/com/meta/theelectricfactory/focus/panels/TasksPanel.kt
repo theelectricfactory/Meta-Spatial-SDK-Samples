@@ -76,7 +76,7 @@ data class Task(val uuid: Int, var title: String, val body: String, var state: I
 @SuppressLint("Range")
 @Composable
 fun TasksPanel() {
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
     var titleInput = remember { mutableStateOf("") }
     var textInput = remember { mutableStateOf("") }
     val tasksList = remember { mutableStateListOf<Task>() }
@@ -87,7 +87,7 @@ fun TasksPanel() {
     val tasksListHasChanged by FocusViewModel.instance.tasksListsHasChanged.collectAsState()
     LaunchedEffect(tasksListHasChanged) {
         tasksList.clear()
-        val cursor = immersiveActivity?.DB?.getTasks(immersiveActivity.currentProject?.uuid)
+        val cursor = immA?.DB?.getTasks(immA.currentProject?.uuid)
         if (cursor != null && cursor.moveToFirst()) {
             while (!cursor.isAfterLast) {
                 val uuid = cursor.getInt(cursor.getColumnIndex(DatabaseManager.TASK_UUID))
@@ -142,7 +142,7 @@ fun TasksPanel() {
                 ) {
                     SecondaryCircleButton(
                         onClick = {
-                            immersiveActivity?.ShowTasksPanel(false)
+                            immA?.ShowTasksPanel(false)
                         },
                         icon = {
                             Icon(
@@ -254,9 +254,9 @@ fun TasksPanel() {
                             label = "+ Add Task",
                             onClick = {
                                 val _uuid = getNewUUID()
-                                immersiveActivity?.DB?.createTask(
+                                immA?.DB?.createTask(
                                     _uuid,
-                                    immersiveActivity.currentProject?.uuid,
+                                    immA.currentProject?.uuid,
                                     titleInput.value,
                                     textInput.value,
                                     templateTaskState.intValue,
@@ -312,6 +312,8 @@ fun TaskCard(
     mainTaskTitle: MutableState<String>? = null,
     mainTaskBody: MutableState<String>? = null
 ) {
+
+    val immA = ImmersiveActivity.getInstance()
     val key = "init_${task.uuid}" //TODO
 
     var taskLabelState = remember(key) { mutableIntStateOf(task.state) }
@@ -323,7 +325,7 @@ fun TaskCard(
     val taskUpdated by FocusViewModel.instance.currentTaskUpdated.collectAsState()
     LaunchedEffect(taskUpdated) {
         if (isSpatial && task.uuid == FocusViewModel.instance.currentTaskUuid.value) {
-            val cursor = ImmersiveActivity.getInstance()?.DB?.getTaskData(FocusViewModel.instance.currentTaskUuid.value)
+            val cursor = immA?.DB?.getTaskData(FocusViewModel.instance.currentTaskUuid.value)
             if (cursor != null && cursor.moveToFirst()) {
                 val taskState = cursor.getInt(cursor.getColumnIndex(DatabaseManager.TASK_STATE))
                 val taskPriority = cursor.getInt(cursor.getColumnIndex(DatabaseManager.TASK_PRIORITY))
@@ -356,7 +358,7 @@ fun TaskCard(
                         var newState = taskLabelState.intValue + 1
                         if (newState > 2) newState = 0
                         taskLabelState.intValue = newState
-                        ImmersiveActivity.getInstance()?.DB?.updateTaskData(
+                        immA?.DB?.updateTaskData(
                             task.uuid,
                             state = newState
                         )
@@ -374,7 +376,7 @@ fun TaskCard(
                         var newPriority = taskLabelPriority.intValue + 1
                         if (newPriority > 2) newPriority = 0
                         taskLabelPriority.intValue = newPriority
-                        ImmersiveActivity.getInstance()?.DB?.updateTaskData(
+                        immA?.DB?.updateTaskData(
                             task.uuid,
                             priority = newPriority
                         )
@@ -411,7 +413,7 @@ fun TaskCard(
                             },
                             onClick = {
                                 // Spatial task is created and saved in database when detach button is pressed
-                                ImmersiveActivity.getInstance()?.DB?.updateTaskData(
+                                immA?.DB?.updateTaskData(
                                     task.uuid,
                                     detach = 1
                                 )
@@ -437,7 +439,7 @@ fun TaskCard(
                             )
                         },
                         onClick = {
-                            ImmersiveActivity.getInstance()!!.deleteTask(task.uuid)
+                            immA!!.deleteTask(task.uuid)
                         }
                     )
                 }
@@ -454,7 +456,7 @@ fun TaskCard(
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    ImmersiveActivity.getInstance()!!.DB.updateTaskData(task.uuid, title = taskTitleInput.value, body = taskBodyInput.value)
+                    immA!!.DB.updateTaskData(task.uuid, title = taskTitleInput.value, body = taskBodyInput.value)
                     if (isSpatial) {
                         mainTaskTitle!!.value = taskTitleInput.value
                     } else {
@@ -485,7 +487,7 @@ fun TaskCard(
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    ImmersiveActivity.getInstance()!!.DB.updateTaskData(task.uuid, title = taskTitleInput.value, body = taskBodyInput.value)
+                    immA!!.DB.updateTaskData(task.uuid, title = taskTitleInput.value, body = taskBodyInput.value)
                     if (isSpatial) {
                         mainTaskBody!!.value = taskBodyInput.value
                     } else {
@@ -516,7 +518,7 @@ fun TaskCard(
     }
 
     if (task.detached == 1 && !isSpatial) {
-        if (ImmersiveActivity.getInstance()?.getSpatialTask(task.uuid) == null) {
+        if (immA?.getSpatialTask(task.uuid) == null) {
             SpatialTask(
                 task = task,
                 mainTaskLabelState = taskLabelState,

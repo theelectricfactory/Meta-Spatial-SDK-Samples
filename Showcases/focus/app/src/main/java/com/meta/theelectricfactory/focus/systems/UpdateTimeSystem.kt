@@ -24,15 +24,16 @@ import java.util.Locale
 class UpdateTimeSystem : SystemBase() {
 
     private var lastTime = System.currentTimeMillis()
+    val immA = ImmersiveActivity.getInstance()
 
     override fun execute() {
 
-        if (ImmersiveActivity.instance.get()?.appStarted == false) return
+        if (immA?.appStarted == false) return
 
         val currentTime = System.currentTimeMillis()
 
         // if there is no current project, we don't update clock
-        if (ImmersiveActivity.instance.get()?.currentProject == null) {
+        if (immA?.currentProject == null) {
             lastTime = currentTime
         }
 
@@ -102,18 +103,12 @@ class UpdateTimeSystem : SystemBase() {
             asset.complete = true
             asset.loop = 1
             entity.setComponent(asset)
-            ImmersiveActivity.instance
-                .get()
-                ?.scene
-                ?.playSound(ImmersiveActivity.instance.get()?.timerSound!!, entity, 1f)
+            immA?.scene?.playSound(immA.timerSound, entity, 1f)
             // Make the timer sound 3 times
         } else if (asset.complete &&
             ((asset.loop == 1 && (timeLeft / 1000) < -2) ||
                     (asset.loop == 2 && (timeLeft / 1000) < -4))) {
-            ImmersiveActivity.instance
-                .get()
-                ?.scene
-                ?.playSound(ImmersiveActivity.instance.get()?.timerSound!!, entity, 1f)
+            immA?.scene?.playSound(immA.timerSound, entity, 1f)
             asset.loop += 1
             entity.setComponent(asset)
             // We delete the timer 6 seconds after it finishes

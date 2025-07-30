@@ -50,6 +50,8 @@ data class ProjectCardData(val uuid: Int, val name: String, val timeAgo: String)
 @Composable
 fun HomePanelFirstFragmentScreen(projects: List<ProjectCardData>) {
 
+    val immA = ImmersiveActivity.getInstance()
+
     LaunchedEffect(Unit) {
         if (projects.isEmpty()) {
             FirstFragment.instance.get()?.refreshProjects()
@@ -71,7 +73,7 @@ fun HomePanelFirstFragmentScreen(projects: List<ProjectCardData>) {
                     PrimaryButton(
                         label = "+ New Project",
                         onClick = {
-                            ImmersiveActivity.instance.get()?.newProject()
+                            immA?.newProject()
                             FirstFragment.instance.get()?.moveToSecondFragment()
                         },
                         expanded = true
@@ -90,11 +92,9 @@ fun HomePanelFirstFragmentScreen(projects: List<ProjectCardData>) {
                 ProjectGrid(
                     projects = projects,
                     onDelete = { uuid ->
-                        ImmersiveActivity.instance
-                            .get()?.scene
-                            ?.playSound(ImmersiveActivity.instance.get()?.deleteSound!!, 1f)
+                        immA?.scene?.playSound(immA.deleteSound, 1f)
 
-                        ImmersiveActivity.instance.get()?.DB?.deleteProject(uuid)
+                        immA?.DB?.deleteProject(uuid)
                         FirstFragment.instance.get()?.refreshProjects()
                     }
                 )
@@ -130,7 +130,7 @@ fun ProjectCard(project: ProjectCardData, onDelete: (Int) -> Unit) {
                 label = project.name,
                 secondaryLabel = project.timeAgo,
                 onSelectionChange = {
-                    ImmersiveActivity.instance.get()?.loadProject(project.uuid)
+                    ImmersiveActivity.getInstance()?.loadProject(project.uuid)
                 }
             )
         }
@@ -157,7 +157,7 @@ fun ProjectCard(project: ProjectCardData, onDelete: (Int) -> Unit) {
 
 @Suppress("Range")
 fun getProjectsFromDB(): List<ProjectCardData> {
-    val cursor = ImmersiveActivity.instance.get()?.DB?.getProjects()
+    val cursor = ImmersiveActivity.getInstance()?.DB?.getProjects()
     val projects = mutableListOf<ProjectCardData>()
 
     if (cursor?.moveToFirst() == true) {

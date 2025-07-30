@@ -32,7 +32,7 @@ import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 @Composable
 fun StickySubPanel() {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     return FocusTheme {
         Box(
@@ -52,12 +52,12 @@ fun StickySubPanel() {
                     color = FocusColors.black,
                 )
 
-                StickyButton("yellow", FocusColors.yellowStickyNote, {immersiveActivity?.CreateStickyNote(0)})
-                StickyButton("green", FocusColors.greenStickyNote, {immersiveActivity?.CreateStickyNote(1)})
-                StickyButton("pink", FocusColors.pinkStickyNote, {immersiveActivity?.CreateStickyNote(2)})
-                StickyButton("orange", FocusColors.orangeStickyNote, {immersiveActivity?.CreateStickyNote(3)})
-                StickyButton("blue", FocusColors.blueStickyNote, {immersiveActivity?.CreateStickyNote(4)})
-                StickyButton("purple", FocusColors.purpleStickyNote, {immersiveActivity?.CreateStickyNote(5)})
+                StickyButton("yellow", FocusColors.yellowStickyNote, {immA?.CreateStickyNote(0)})
+                StickyButton("green", FocusColors.greenStickyNote, {immA?.CreateStickyNote(1)})
+                StickyButton("pink", FocusColors.pinkStickyNote, {immA?.CreateStickyNote(2)})
+                StickyButton("orange", FocusColors.orangeStickyNote, {immA?.CreateStickyNote(3)})
+                StickyButton("blue", FocusColors.blueStickyNote, {immA?.CreateStickyNote(4)})
+                StickyButton("purple", FocusColors.purpleStickyNote, {immA?.CreateStickyNote(5)})
             }
         }
     }

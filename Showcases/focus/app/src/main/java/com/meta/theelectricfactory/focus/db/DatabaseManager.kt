@@ -17,6 +17,8 @@ import com.meta.theelectricfactory.focus.data.StickyColor
 // Class to create and update Focus database
 class DatabaseManager(ctx: Context) : SQLiteOpenHelper(ctx, DATABASE_NAME, null, DATABASE_VERSION) {
 
+    val immA = ImmersiveActivity.getInstance()
+
     companion object {
         public const val DATABASE_NAME = "focusapp.db"
         // Database version needs to be incremented each time you make a change in the database
@@ -235,7 +237,7 @@ class DatabaseManager(ctx: Context) : SQLiteOpenHelper(ctx, DATABASE_NAME, null,
     fun updateLastTimeOpen() {
         // We save last time the user interacted with elements in the project to show this info in the
         // Home Panel
-        if (ImmersiveActivity.instance.get()?.currentProject == null) return
+        if (immA?.currentProject == null) return
         val db = writableDatabase
         val values =
             ContentValues().apply { put(PROJECT_LAST_OPENING, System.currentTimeMillis().toString()) }
@@ -243,7 +245,7 @@ class DatabaseManager(ctx: Context) : SQLiteOpenHelper(ctx, DATABASE_NAME, null,
             PROJECTS_TABLE,
             values,
             "$PROJECT_UUID=?",
-            arrayOf(ImmersiveActivity.instance.get()?.currentProject?.uuid.toString()))
+            arrayOf(immA.currentProject?.uuid.toString()))
         db.close()
     }
 

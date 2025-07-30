@@ -57,18 +57,18 @@ import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 @Composable
 fun HomePanelSecondFragmentScreen() {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
-    var saveButtonLabel = if (immersiveActivity?.currentProject != null) "Save project" else "Create project"
+    var saveButtonLabel = if (immA?.currentProject != null) "Save project" else "Create project"
     var projectNameInput = remember {
         mutableStateOf(
-            if (immersiveActivity?.currentProject != null) immersiveActivity.currentProject!!.name
+            if (immA?.currentProject != null) immA.currentProject!!.name
             else ""
         )
     }
     var envSelected = remember {
         mutableIntStateOf(
-            if (immersiveActivity?.currentProject != null && !immersiveActivity.currentProject!!.MR) immersiveActivity.currentProject?.environment!!
+            if (immA?.currentProject != null && !immA.currentProject!!.MR) immA.currentProject?.environment!!
             else 3
         )
     }
@@ -105,9 +105,9 @@ fun HomePanelSecondFragmentScreen() {
                             },
                             onClick = {
                                 // If we don't have a current project open, we return Home Panel first view.
-                                if (ImmersiveActivity.getInstance()?.currentProject == null) {
+                                if (immA?.currentProject == null) {
                                     projectNameInput.value = ""
-                                    ImmersiveActivity.getInstance()?.newProject()
+                                    immA?.newProject()
                                     SecondFragment.instance.get()?.moveToFirstFragment()
                                 } else {
                                     // If it's an old project, we update project info each time the user closes or changes a property
@@ -175,10 +175,9 @@ fun HomePanelSecondFragmentScreen() {
                                 .selectable(
                                     selected = envSelected.intValue == environment.index,
                                     onClick = {
-                                        if (ImmersiveActivity.getInstance()?.currentProject != null) {
-                                            ImmersiveActivity.getInstance()?.currentProject!!.environment = environment.index
-                                            ImmersiveActivity.getInstance()
-                                                ?.saveProjectSettings(envSelected.intValue != 3, projectNameInput.value)
+                                        if (immA?.currentProject != null) {
+                                            immA.currentProject!!.environment = environment.index
+                                            immA.saveProjectSettings(envSelected.intValue != 3, projectNameInput.value)
                                         }
                                         envSelected.intValue = environment.index
                                     },

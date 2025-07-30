@@ -32,6 +32,8 @@ class Tool(
     var deleteButtonHeight: Float = 0.08f,
     var parentUuid: Int = -1
 ) {
+    val immA = ImmersiveActivity.getInstance()
+
     init {
 
         var obj: Entity
@@ -81,18 +83,16 @@ class Tool(
         if (uuid == -1) {
             if (type == AssetType.BOARD) placeInFront(obj, bigPanel = true) else placeInFront(obj)
             uuid = getNewUUID()
-            ImmersiveActivity.instance
-                .get()
-                ?.DB
-                ?.createToolAsset(
-                    uuid,
-                    ImmersiveActivity.instance.get()?.currentProject?.uuid,
-                    type,
-                    source,
-                    size,
-                    deleteButtonHeight,
-                    obj.getComponent<Transform>().transform)
-            ImmersiveActivity.instance.get()?.playCreationSound(obj.getComponent<Transform>().transform.t)
+            immA?.DB?.createToolAsset(
+                uuid,
+                immA.currentProject?.uuid,
+                type,
+                source,
+                size,
+                deleteButtonHeight,
+                obj.getComponent<Transform>().transform
+            )
+            immA?.playCreationSound(obj.getComponent<Transform>().transform.t)
         }
 
         // We add it a ToolComponent to be able to identify it and get the type and uuid of the entity

@@ -40,7 +40,7 @@ import com.meta.theelectricfactory.focus.viewmodels.FocusViewModel
 @Composable
 fun ToolbarPanel() {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     val selectedTool by FocusViewModel.instance.selectedTool.collectAsState()
     val speakerIsOn by FocusViewModel.instance.speakerIsOn.collectAsState()
@@ -74,7 +74,7 @@ fun ToolbarPanel() {
                             false,
                             color = FocusColors.lightGray,
                             onClick = {
-                                immersiveActivity?.OpenHomePanel()
+                                immA?.OpenHomePanel()
                             }
                         )
 
@@ -84,7 +84,7 @@ fun ToolbarPanel() {
                             false,
                             color = FocusColors.lightGray,
                             onClick = {
-                                immersiveActivity?.SwitchAudio()
+                                immA?.SwitchAudio()
                             }
                         )
 
@@ -94,7 +94,7 @@ fun ToolbarPanel() {
                             false,
                             color = FocusColors.lightGray,
                             onClick = {
-                                immersiveActivity?.OpenSettingsPanel()
+                                immA?.OpenSettingsPanel()
                             }
                         )
                     }
@@ -118,7 +118,7 @@ fun ToolbarPanel() {
                             false,
                             color = FocusColors.lightBlue,
                             onClick = {
-                                immersiveActivity?.ShowTasksPanel(true)
+                                immA?.ShowTasksPanel(true)
                             }
                         )
 
@@ -128,18 +128,18 @@ fun ToolbarPanel() {
                             false,
                             color = FocusColors.lightGreen,
                             onClick = {
-                                immersiveActivity?.OpenWebView()
+                                immA?.OpenWebView()
                             }
                         )
 
-                        if (immersiveActivity != null && immersiveActivity.AIenabled) {
+                        if (immA != null && immA.AIenabled) {
                             ToolbarButton(
                                 R.drawable.ai,
                                 "Chat with AI",
                                 false,
                                 color = FocusColors.aiPurple,
                                 onClick = {
-                                    immersiveActivity.ShowAIPanel(true)
+                                    immA.ShowAIPanel(true)
                                 }
                             )
                         }
@@ -156,7 +156,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 0) FocusViewModel.instance.setSelectedTool(0)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immersiveActivity?.openSubPanel(immersiveActivity.stickySubPanel)
+                                immA?.openSubPanel(immA.stickySubPanel)
                             }
                         )
 
@@ -167,7 +167,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 1) FocusViewModel.instance.setSelectedTool(1)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immersiveActivity?.openSubPanel(immersiveActivity.labelSubPanel)
+                                immA?.openSubPanel(immA.labelSubPanel)
                             }
                         )
 
@@ -178,7 +178,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 2) FocusViewModel.instance.setSelectedTool(2)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immersiveActivity?.openSubPanel(immersiveActivity.arrowSubPanel)
+                                immA?.openSubPanel(immA.arrowSubPanel)
                             }
                         )
 
@@ -189,7 +189,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 3) FocusViewModel.instance.setSelectedTool(3)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immersiveActivity?.openSubPanel(immersiveActivity.boardSubPanel)
+                                immA?.openSubPanel(immA.boardSubPanel)
                             }
                         )
 
@@ -200,7 +200,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 4) FocusViewModel.instance.setSelectedTool(4)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immersiveActivity?.openSubPanel(immersiveActivity.shapeSubPanel)
+                                immA?.openSubPanel(immA.shapeSubPanel)
                             }
                         )
 
@@ -211,7 +211,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 5) FocusViewModel.instance.setSelectedTool(5)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immersiveActivity?.openSubPanel(immersiveActivity.stickerSubPanel)
+                                immA?.openSubPanel(immA.stickerSubPanel)
                             }
                         )
 
@@ -222,7 +222,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 6) FocusViewModel.instance.setSelectedTool(6)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immersiveActivity?.openSubPanel(immersiveActivity.timerSubPanel)
+                                immA?.openSubPanel(immA.timerSubPanel)
                             }
                         )
                     }

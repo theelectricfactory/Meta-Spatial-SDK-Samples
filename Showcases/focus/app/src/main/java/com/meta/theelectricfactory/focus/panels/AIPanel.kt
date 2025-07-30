@@ -79,7 +79,7 @@ data class Message(val text: String, val isUser: Boolean)
 @Composable
 fun AIPanel() {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
     var messageInput = remember { mutableStateOf("") }
     var messagesList = remember { mutableStateListOf<Message>() }
     var stickyAvailable = remember { mutableStateOf(false) }
@@ -125,7 +125,7 @@ fun AIPanel() {
                 ) {
                     SecondaryCircleButton(
                         onClick = {
-                            immersiveActivity?.ShowAIPanel(false)
+                            immA?.ShowAIPanel(false)
                         },
                         icon = {
                             Icon(
@@ -186,7 +186,7 @@ fun AIPanel() {
                                         tint = Color.Unspecified
                                     )},
                                     onClick = {
-                                        immersiveActivity?.summarize(immersiveActivity.lastAIResponse)
+                                        immA?.summarize(immA.lastAIResponse)
                                         stickyAvailable.value = false
                                     },
                                     isEnabled = stickyAvailable.value
@@ -246,11 +246,11 @@ fun AIPanel() {
                                                     0,
                                                     Message(messageInput.value, true)
                                                 )
-                                                immersiveActivity?.askToAI(messageInput.value, {
+                                                immA?.askToAI(messageInput.value, {
                                                     messagesList.add(
                                                         0,
                                                         Message(
-                                                            immersiveActivity.lastAIResponse,
+                                                            immA.lastAIResponse,
                                                             false
                                                         )
                                                     )

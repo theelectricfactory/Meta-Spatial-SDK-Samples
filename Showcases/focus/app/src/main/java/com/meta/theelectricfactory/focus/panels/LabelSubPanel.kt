@@ -34,7 +34,7 @@ import com.meta.theelectricfactory.focus.data.stateLabels
 @Composable
 fun LabelSubPanel() {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     return FocusTheme {
         Box(
@@ -55,12 +55,12 @@ fun LabelSubPanel() {
                     color = FocusColors.black,
                 )
 
-                LabelButton(stateLabels[0], {immersiveActivity?.CreateLabelTool(0)})
-                LabelButton(stateLabels[1], {immersiveActivity?.CreateLabelTool(1)})
-                LabelButton(stateLabels[2], {immersiveActivity?.CreateLabelTool(2)})
-                LabelButton(priorityLabels[0], {immersiveActivity?.CreateLabelTool(3)})
-                LabelButton(priorityLabels[1], {immersiveActivity?.CreateLabelTool(4)})
-                LabelButton(priorityLabels[2], {immersiveActivity?.CreateLabelTool(5)})
+                LabelButton(stateLabels[0], {immA?.CreateLabelTool(0)})
+                LabelButton(stateLabels[1], {immA?.CreateLabelTool(1)})
+                LabelButton(stateLabels[2], {immA?.CreateLabelTool(2)})
+                LabelButton(priorityLabels[0], {immA?.CreateLabelTool(3)})
+                LabelButton(priorityLabels[1], {immA?.CreateLabelTool(4)})
+                LabelButton(priorityLabels[2], {immA?.CreateLabelTool(5)})
             }
         }
     }

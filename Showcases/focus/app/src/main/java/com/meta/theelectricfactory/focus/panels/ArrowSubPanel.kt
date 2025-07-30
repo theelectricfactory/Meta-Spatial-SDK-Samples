@@ -31,7 +31,7 @@ import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 @Composable
 fun ArrowSubPanel() {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     return FocusTheme {
         Box(
@@ -53,12 +53,12 @@ fun ArrowSubPanel() {
                     color = LocalColorScheme.current.primaryButton,
                 )
 
-                ArrowButton( R.drawable.button_arrow1, {immersiveActivity?.CreateArrowTool(0)})
-                ArrowButton( R.drawable.button_arrow2, {immersiveActivity?.CreateArrowTool(1)})
-                ArrowButton( R.drawable.button_arrow3, {immersiveActivity?.CreateArrowTool(2)})
-                ArrowButton( R.drawable.button_arrow4, {immersiveActivity?.CreateArrowTool(3)})
-                ArrowButton( R.drawable.button_arrow5, {immersiveActivity?.CreateArrowTool(4)})
-                ArrowButton( R.drawable.button_arrow6, {immersiveActivity?.CreateArrowTool(5)})
+                ArrowButton( R.drawable.button_arrow1, {immA?.CreateArrowTool(0)})
+                ArrowButton( R.drawable.button_arrow2, {immA?.CreateArrowTool(1)})
+                ArrowButton( R.drawable.button_arrow3, {immA?.CreateArrowTool(2)})
+                ArrowButton( R.drawable.button_arrow4, {immA?.CreateArrowTool(3)})
+                ArrowButton( R.drawable.button_arrow5, {immA?.CreateArrowTool(4)})
+                ArrowButton( R.drawable.button_arrow6, {immA?.CreateArrowTool(5)})
             }
         }
     }

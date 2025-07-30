@@ -29,7 +29,7 @@ class StickyNote(
     var pose: Pose = Pose(),
     var parentUuid: Int = -1
 ) {
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     init {
         var id = getDisposableID()
@@ -42,22 +42,18 @@ class StickyNote(
         if (uuid == -1) {
             placeInFront(sticky)
             uuid = getNewUUID()
-            ImmersiveActivity.instance
-                .get()
-                ?.DB
-                ?.createSticky(
-                    uuid,
-                    ImmersiveActivity.instance.get()?.currentProject?.uuid,
-                    color,
-                    message,
-                    sticky.getComponent<Transform>().transform)
-            ImmersiveActivity.instance
-                .get()
-                ?.playCreationSound(sticky.getComponent<Transform>().transform.t)
+            immA?.DB?.createSticky(
+                uuid,
+                immA?.currentProject?.uuid,
+                color,
+                message,
+                sticky.getComponent<Transform>().transform
+            )
+            immA?.playCreationSound(sticky.getComponent<Transform>().transform.t)
         }
 
         // Register the panel
-        immersiveActivity?.registerPanel(
+        immA?.registerPanel(
             panelRegistration(id, 0.14f, 0.14f) {
                 StickyNotePanel(
                     uuid = uuid,

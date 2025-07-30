@@ -44,10 +44,8 @@ fun getDisposableID(): Int {
 // Creates ids to identify objects in projects. This is not temporal
 fun getNewUUID(): Int {
     val savedData =
-        ImmersiveActivity.instance
-            .get()!!
-            .getSharedPreferences(
-                "com.meta.theelectricfactory.focus.MySavedData", Activity.MODE_PRIVATE)
+        ImmersiveActivity.getInstance()!!.getSharedPreferences(
+        "com.meta.theelectricfactory.focus.MySavedData", Activity.MODE_PRIVATE)
     val uuid = savedData.getInt("currentUUID", -1)
 
     with(savedData.edit()) {
@@ -189,7 +187,7 @@ fun getHeadPose(): Pose {
 fun placeInFront(entity: Entity?, offset: Vector3 = Vector3(0f), bigPanel: Boolean = false) {
     val headPose: Pose = getHeadPose()
 
-    val isToolbar = entity!! == ImmersiveActivity.instance.get()?.toolbarPanel
+    val isToolbar = entity!! == ImmersiveActivity.getInstance()?.toolbarPanel
 
     // We treat toolbar and big panels differently from other objects.
     val height: Float = if (isToolbar) 0.35f else 0.1f
@@ -257,15 +255,16 @@ fun deleteObject(
     deleteFromDB: Boolean = false,
     cleaningProject: Boolean = false
 ) {
+    val immA = ImmersiveActivity.getInstance()
     val position = entity!!.getComponent<Transform>().transform.t
 
-    if (ImmersiveActivity.getInstance()?.currentObjectSelected != null && ImmersiveActivity.getInstance()?.currentObjectSelected!!.equals(entity)) {
-        ImmersiveActivity.getInstance()?.currentObjectSelected = null
+    if (immA?.currentObjectSelected != null && immA?.currentObjectSelected!!.equals(entity)) {
+        immA?.currentObjectSelected = null
     }
 
     // deleteButton is detached from the object
-    ImmersiveActivity.getInstance()?.deleteButton?.setComponent(TransformParent())
-    ImmersiveActivity.getInstance()?.deleteButton?.setComponent(Visible(false))
+    immA?.deleteButton?.setComponent(TransformParent())
+    immA?.deleteButton?.setComponent(Visible(false))
 
     // Checking type of object to know how to delete it.
     val asset = entity.getComponent<ToolComponent>()
@@ -274,21 +273,21 @@ fun deleteObject(
     if (deleteFromDB && asset.type != AssetType.TASK && asset.type != AssetType.TIMER) {
         when (asset.type) {
             AssetType.STICKY_NOTE -> {
-                ImmersiveActivity.getInstance()?.DB?.deleteSticky(asset.uuid)
+                immA?.DB?.deleteSticky(asset.uuid)
             }
             AssetType.BOARD -> {
                 var children = getChildren(entity)
                 for (i in children.count() - 1 downTo 0) {
                     deleteObject(children[i], true)
                 }
-                ImmersiveActivity.getInstance()?.DB?.deleteToolAsset(asset.uuid)
+                immA?.DB?.deleteToolAsset(asset.uuid)
             }
             else -> {
-                ImmersiveActivity.getInstance()?.DB?.deleteToolAsset(asset.uuid)
+                immA?.DB?.deleteToolAsset(asset.uuid)
             }
         }
     } else if (asset.type == AssetType.TASK && !cleaningProject) {
-        ImmersiveActivity.getInstance()?.DB?.updateTaskData(asset.uuid, detach = 0)
+        immA?.DB?.updateTaskData(asset.uuid, detach = 0)
         FocusViewModel.instance.refreshTasksPanel()
 
         // In case of some object, we need to delete its children too
@@ -299,5 +298,5 @@ fun deleteObject(
         }
     }
     entity.destroy()
-    if (!cleaningProject) ImmersiveActivity.getInstance()?.scene?.playSound(ImmersiveActivity.getInstance()?.deleteSound!!, position, 1f)
+    if (!cleaningProject) immA?.scene?.playSound(immA?.deleteSound!!, position, 1f)
 }

@@ -32,7 +32,7 @@ import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 @Composable
 fun TimerSubPanel() {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     return FocusTheme {
         Box(
@@ -54,12 +54,12 @@ fun TimerSubPanel() {
                     color = FocusColors.black,
                 )
 
-                TimerButton( R.drawable.timer1, {immersiveActivity?.CreateTimer(0)})
-                TimerButton( R.drawable.timer2, {immersiveActivity?.CreateTimer(1)})
-                TimerButton( R.drawable.timer3, {immersiveActivity?.CreateTimer(2)})
-                TimerButton( R.drawable.timer4, {immersiveActivity?.CreateTimer(3)})
-                TimerButton( R.drawable.timer5, {immersiveActivity?.CreateTimer(4)})
-                TimerButton( R.drawable.timer6, {immersiveActivity?.CreateTimer(5)})
+                TimerButton( R.drawable.timer1, {immA?.CreateTimer(0)})
+                TimerButton( R.drawable.timer2, {immA?.CreateTimer(1)})
+                TimerButton( R.drawable.timer3, {immA?.CreateTimer(2)})
+                TimerButton( R.drawable.timer4, {immA?.CreateTimer(3)})
+                TimerButton( R.drawable.timer5, {immA?.CreateTimer(4)})
+                TimerButton( R.drawable.timer6, {immA?.CreateTimer(5)})
             }
         }
     }

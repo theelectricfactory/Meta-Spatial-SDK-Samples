@@ -32,7 +32,7 @@ import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 @Composable
 fun StickerSubPanel() {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     return FocusTheme {
         Box(
@@ -54,12 +54,12 @@ fun StickerSubPanel() {
                     color = FocusColors.black,
                 )
 
-                StickerButton( R.drawable.sticker1, {immersiveActivity?.CreateSticker(0)})
-                StickerButton( R.drawable.sticker2, {immersiveActivity?.CreateSticker(1)})
-                StickerButton( R.drawable.sticker3, {immersiveActivity?.CreateSticker(2)})
-                StickerButton( R.drawable.sticker4, {immersiveActivity?.CreateSticker(3)})
-                StickerButton( R.drawable.sticker5, {immersiveActivity?.CreateSticker(4)})
-                StickerButton( R.drawable.sticker6, {immersiveActivity?.CreateSticker(5)})
+                StickerButton( R.drawable.sticker1, {immA?.CreateSticker(0)})
+                StickerButton( R.drawable.sticker2, {immA?.CreateSticker(1)})
+                StickerButton( R.drawable.sticker3, {immA?.CreateSticker(2)})
+                StickerButton( R.drawable.sticker4, {immA?.CreateSticker(3)})
+                StickerButton( R.drawable.sticker5, {immA?.CreateSticker(4)})
+                StickerButton( R.drawable.sticker6, {immA?.CreateSticker(5)})
             }
         }
     }

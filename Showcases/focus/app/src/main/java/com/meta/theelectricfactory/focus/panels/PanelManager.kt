@@ -2,33 +2,24 @@ package com.meta.theelectricfactory.focus.panels
 
 import androidx.compose.runtime.Composable
 import com.meta.spatial.compose.composePanel
-import com.meta.spatial.core.Entity
-import com.meta.spatial.core.Pose
-import com.meta.spatial.core.Vector3
 import com.meta.spatial.runtime.LayerConfig
-import com.meta.spatial.toolkit.Grabbable
-import com.meta.spatial.toolkit.GrabbableType
 import com.meta.spatial.toolkit.PanelRegistration
-import com.meta.spatial.toolkit.Transform
-import com.meta.spatial.toolkit.Visible
-import com.meta.spatial.toolkit.createPanelEntity
-import com.meta.spatial.toolkit.TransformParent
 import com.meta.theelectricfactory.focus.MainActivity
 import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 
 object PanelRegistrationIds {
-    const val HomePanel = 22 //TODO
-    const val AIPanel = 23
-    const val TasksPanel = 24
-    const val Toolbar = 25
-    const val StickySubPanel = 26
-    const val LabelSubPanel = 27
-    const val ArrowSubPanel = 28
-    const val BoardSubPanel = 29
-    const val ShapesSubPanel = 30
-    const val StickerSubPanel = 31
-    const val TimerSubPanel = 32
+    const val HomePanel = 20
+    const val AIPanel = 21
+    const val TasksPanel = 22
+    const val Toolbar = 23
+    const val StickySubPanel = 24
+    const val LabelSubPanel = 25
+    const val ArrowSubPanel = 26
+    const val BoardSubPanel = 27
+    const val ShapesSubPanel = 28
+    const val StickerSubPanel = 29
+    const val TimerSubPanel = 30
 }
 
 fun panelRegistration(

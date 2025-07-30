@@ -31,7 +31,7 @@ import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 @Composable
 fun BoardSubPanel() {
 
-    var immersiveActivity = ImmersiveActivity.getInstance()
+    var immA = ImmersiveActivity.getInstance()
 
     return FocusTheme {
         Box(
@@ -53,10 +53,10 @@ fun BoardSubPanel() {
                     color = LocalColorScheme.current.primaryButton,
                 )
 
-                BoardButton( R.drawable.button_board1, {immersiveActivity?.CreateBoard(0)})
-                BoardButton( R.drawable.button_board2, {immersiveActivity?.CreateBoard(1)})
-                BoardButton( R.drawable.button_board3, {immersiveActivity?.CreateBoard(2)})
-                BoardButton( R.drawable.button_board4, {immersiveActivity?.CreateBoard(3)})
+                BoardButton( R.drawable.button_board1, {immA?.CreateBoard(0)})
+                BoardButton( R.drawable.button_board2, {immA?.CreateBoard(1)})
+                BoardButton( R.drawable.button_board3, {immA?.CreateBoard(2)})
+                BoardButton( R.drawable.button_board4, {immA?.CreateBoard(3)})
             }
         }
     }
