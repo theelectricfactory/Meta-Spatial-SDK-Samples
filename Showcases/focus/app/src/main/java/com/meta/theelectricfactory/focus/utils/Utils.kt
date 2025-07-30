@@ -57,8 +57,7 @@ fun getNewUUID(): Int {
     return (uuid + 1)
 }
 
-// This function adds an input listener to an entity, to detect when has been selected and show the
-// delete button on it
+// This function adds an input listener to an entity, to detect when has been selected and show the delete button on it
 fun addDeleteButton(entity: Entity, panel: PanelSceneObject? = null) {
     // If entity has a Panel, we need to detect the input in the panel
     if (panel != null) {
@@ -193,13 +192,11 @@ fun placeInFront(entity: Entity?, offset: Vector3 = Vector3(0f), bigPanel: Boole
     val height: Float = if (isToolbar) 0.35f else 0.1f
     var distanceFromUser: Float = if (bigPanel) 0.9f else 0.7f
 
-    // Having the users position, we place the entity in front of it, at a particular distance and
-    // height
+    // Having the users position, we place the entity in front of it, at a particular distance and height
     var newPos = headPose.t + headPose.q * Vector3.Forward * distanceFromUser
     newPos.y = headPose.t.y - height
 
-    // If there is an offset vector, we place the object at the vector position (using user's position
-    // as reference)
+    // If there is an offset vector, we place the object at the vector position (using user's position as reference)
     if (offset != Vector3(0f)) {
         newPos =
             headPose.t + headPose.q * Vector3.Right * offset.x + headPose.q * Vector3.Forward * offset.z
@@ -219,6 +216,7 @@ fun placeInFront(entity: Entity?, offset: Vector3 = Vector3(0f), bigPanel: Boole
     entity.setComponent(Transform(Pose(newPos, newRot)))
 }
 
+// Hack to check if the user is still writing in a text field or search bar, as the elements doesn't have a property to detect it
 fun checkIfStillWriting( typingInterval: Long, lastTextChangeTime: Long, handler: Handler, lastRunnable: Array<Runnable?>, onComplete: () -> (Unit)) {
 
     lastRunnable[0]?.let { handler.removeCallbacks(it) }
@@ -268,8 +266,7 @@ fun deleteObject(
 
     // Checking type of object to know how to delete it.
     val asset = entity.getComponent<ToolComponent>()
-    // Check if we have to delete it from database as well or we are just cleaning the space to show
-    // a different project
+    // Check if we have to delete it from database as well or we are just cleaning the space to show a different project
     if (deleteFromDB && asset.type != AssetType.TASK && asset.type != AssetType.TIMER) {
         when (asset.type) {
             AssetType.STICKY_NOTE -> {

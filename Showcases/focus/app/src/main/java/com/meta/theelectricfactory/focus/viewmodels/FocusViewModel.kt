@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+// Viewmodel to share and update data with some Compose functions (panels)
 class FocusViewModel : ViewModel() {
     private val _tasksListsHasChanged = MutableStateFlow<Int>(0)
     val tasksListsHasChanged = _tasksListsHasChanged.asStateFlow()

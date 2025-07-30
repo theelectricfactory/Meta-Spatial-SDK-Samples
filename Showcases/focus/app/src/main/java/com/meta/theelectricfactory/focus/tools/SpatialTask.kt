@@ -92,6 +92,7 @@ class SpatialTask(
         // We add an AttachableComponent to the object to be able to stick it to the boards
         taskPanelEntity.setComponent(AttachableComponent(parentUuid = task.parentUuid))
 
+        // If spatial task has a parent, we link it to the parent board
         if (task.parentUuid != -1) {
             if (!taskPanelEntity.hasComponent<TransformParent>() ||
                 (taskPanelEntity.hasComponent<TransformParent>() && taskPanelEntity.getComponent<TransformParent>().entity == Entity.nullEntity())) {

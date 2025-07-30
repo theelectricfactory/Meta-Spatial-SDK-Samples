@@ -1,3 +1,5 @@
+// (c) Meta Platforms, Inc. and affiliates. Confidential and proprietary.
+
 package com.meta.theelectricfactory.focus.panels
 
 import androidx.compose.runtime.Composable
@@ -34,7 +36,7 @@ fun panelRegistration(
             width = widthInMeters
             height = heightInMeters
             layoutWidthInDp = FOCUS_DP * width
-            layerConfig = LayerConfig() // TODO maybe this is too expensive
+            layerConfig = LayerConfig()
             enableTransparent = true
             includeGlass = false
             themeResourceId = R.style.Theme_Focus_Transparent

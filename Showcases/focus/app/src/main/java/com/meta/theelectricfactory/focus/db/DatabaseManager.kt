@@ -21,8 +21,7 @@ class DatabaseManager(ctx: Context) : SQLiteOpenHelper(ctx, DATABASE_NAME, null,
 
     companion object {
         public const val DATABASE_NAME = "focusapp.db"
-        // Database version needs to be incremented each time you make a change in the database
-        // structure
+        // Database version needs to be incremented each time you make a change in the database structure
         public const val DATABASE_VERSION = 11
 
         // Projects table
@@ -235,8 +234,7 @@ class DatabaseManager(ctx: Context) : SQLiteOpenHelper(ctx, DATABASE_NAME, null,
     }
 
     fun updateLastTimeOpen() {
-        // We save last time the user interacted with elements in the project to show this info in the
-        // Home Panel
+        // We save last time the user interacted with elements in the project to show this info in the Home Panel
         if (immA?.currentProject == null) return
         val db = writableDatabase
         val values =

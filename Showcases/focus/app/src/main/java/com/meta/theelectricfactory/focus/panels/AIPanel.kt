@@ -87,6 +87,7 @@ fun AIPanel() {
     var sendButtonIcon = remember { mutableIntStateOf(R.drawable.send) }
     val currentProjectUuid by FocusViewModel.instance.currentProjectUuid.collectAsState()
 
+    // Message list is cleared when the project changes
     LaunchedEffect(currentProjectUuid) {
         messagesList.clear()
     }

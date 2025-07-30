@@ -78,6 +78,8 @@ fun StickyNotePanel(
                                 .align(Alignment.TopCenter)
                                 .padding(5.dp),
                         ) {
+                            //TODO
+                            
 //                            SpatialTextField(
 //                                modifier = Modifier
 //                                    .fillMaxWidth(),

@@ -15,9 +15,7 @@ import com.meta.theelectricfactory.focus.AttachableComponent
 import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.ToolComponent
 
-// This system allow us to detect when an object is close to a board and give the sensation to stick
-// it to the board.
-// This doesn't really parent it to the board
+// This system allow us to detect when an object is close to a board and stick to it by setting it as its parent.
 class BoardParentingSystem : SystemBase() {
 
     override fun execute() {
@@ -46,13 +44,14 @@ class BoardParentingSystem : SystemBase() {
 
             // Get vertices of the board
             val vertices = getMeshBoundsAbsolutePosition(board)
-            // Calculate absolute distance from sticker point to board
+            // Calculate absolute distance from sticker to board
             val distance =
                 pointToRectangleDistance(getAbsoluteTransform(grabbedChild).t, vertices[0], vertices[1], vertices[2], vertices[3])
 
             val uuid = grabbedChild.getComponent<ToolComponent>().uuid
             val assetType = grabbedChild.getComponent<ToolComponent>().type
 
+            // Detect if object has to be parented to the board
             if ((!grabbedChild.hasComponent<TransformParent>() ||
                 grabbedChild.hasComponent<TransformParent>() && grabbedChild.getComponent<TransformParent>().entity != board) &&
                 distance < 0.08f) {

@@ -20,10 +20,12 @@ import androidx.compose.ui.unit.sp
 import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.data.StickyColor
 
+// Defining settings for different color styles
 enum class FocusColorSchemes {
     Main, Gray, BlueTooltip, PurpleTooltip, Transparent
 }
 
+// Defining settings for different shapes styles
 enum class FocusShapes {
     Main, Squared
 }
@@ -40,6 +42,7 @@ val focusFont = FontFamily(
     Font(R.font.onest_thin, FontWeight.Thin),
 )
 
+// Defining colors used in the experience
 object FocusColors {
     val panel =
         Brush.verticalGradient(
@@ -182,7 +185,6 @@ fun focusTypo(): SpatialTypography {
         ),
         body1 = LocalTypography.current.body1.copy( //primary button text
             fontFamily = focusFont,
-            //color = FocusColors.textColor,
             fontSize = 20.sp),
         body2 = LocalTypography.current.body2.copy( //secondary label text
             fontFamily = focusFont,
@@ -201,7 +203,7 @@ fun focusTypo(): SpatialTypography {
             fontSize = 20.sp),
         body2Strong = LocalTypography.current.body2.copy(
             fontFamily = focusFont
-        ), //fontWeight = FontWeight.ExtraBold
+        ),
     )
 
     return typo

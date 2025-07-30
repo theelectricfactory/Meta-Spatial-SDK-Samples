@@ -13,6 +13,7 @@ import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.panels.HomePanelSecondFragmentScreen
 import java.lang.ref.WeakReference
 
+// Home Panel Second Screen
 class SecondFragment : Fragment() {
 
     override fun onCreateView(

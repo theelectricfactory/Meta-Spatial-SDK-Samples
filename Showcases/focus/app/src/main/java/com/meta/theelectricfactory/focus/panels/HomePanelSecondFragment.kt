@@ -115,10 +115,7 @@ fun HomePanelSecondFragmentScreen() {
                                 }
                             }
                         )
-
                     }
-
-
                 }
 
                 Spacer(modifier = Modifier.size(30.dp))
@@ -250,7 +247,6 @@ fun HomePanelSecondFragmentScreen() {
     }
 }
 
-// Show a border for selected environment image
 fun selectEnv(env: Int) {
     if (env != 3) ImmersiveActivity.getInstance()?.selectEnvironment(env)
     else ImmersiveActivity.getInstance()?.selectMRMode()

@@ -16,6 +16,7 @@ import com.meta.theelectricfactory.focus.panels.HomePanelFirstFragmentScreen
 import com.meta.theelectricfactory.focus.panels.ProjectCardData
 import com.meta.theelectricfactory.focus.panels.getProjectsFromDB
 
+// Home Panel First Screen
 class FirstFragment : Fragment() {
 
     private val _projects = mutableStateListOf<ProjectCardData>()

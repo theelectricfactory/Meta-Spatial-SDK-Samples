@@ -27,7 +27,7 @@ val priorityLabels = arrayOf(
     Label("High priority", Color(0xFFFFDADA), Color(0xFFA30000)),
 )
 
-// Enum to save sticky notes possible colors
+// Sticky note color options
 enum class StickyColor {
     Yellow,
     Green,
@@ -36,8 +36,6 @@ enum class StickyColor {
     Blue,
     Purple
 }
-
-// GENERAL DATA
 
 // Textures and models for tools
 val arrows =

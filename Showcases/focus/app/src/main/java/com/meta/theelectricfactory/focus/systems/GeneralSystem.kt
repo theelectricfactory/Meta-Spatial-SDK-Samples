@@ -16,8 +16,7 @@ import com.meta.theelectricfactory.focus.utils.getHeadPose
 import com.meta.theelectricfactory.focus.utils.placeInFront
 
 // This is a custom system created to control general stuff of the app,
-// like the loading of the first assets, the behaviour of the toolbar and the loading state of the
-// AI chat panel
+// like the loading of the first assets, the behaviour of the toolbar and the loading state of the AI chat panel
 class GeneralSystem() : SystemBase() {
 
     private var initTime = System.currentTimeMillis()
@@ -36,8 +35,7 @@ class GeneralSystem() : SystemBase() {
             val headPose: Pose = getHeadPose()
             val logo = immA.logo
 
-            // We wait for the tracking system to start, then app logo is shown for 5 seconds, followed by
-            // home panel.
+            // We wait for the tracking system to start, then app logo is shown for 5 seconds, followed by home panel.
             if (headPose.t != Vector3(0f) && !logo.getComponent<Visible>().isVisible) {
 
                 placeInFront(immA.logo, Vector3(0f, -0.1f, 0.9f))
@@ -56,8 +54,7 @@ class GeneralSystem() : SystemBase() {
                 immA.initApp()
             }
 
-        // If the ambient audio in On, we update the position vector of the ambientSoundPlayer with
-        // the Speaker position
+        // If the ambient audio in On, we update the position vector of the ambientSoundPlayer with the Speaker position
         } else if (immA?.speakerIsOn == true) {
             val pos = immA.speaker.getComponent<Transform>().transform.t
             immA.ambientSoundPlayer.setPosition(pos)
