@@ -71,57 +71,49 @@ fun WebViewPanel(
                 Row (modifier = Modifier
                         .fillMaxWidth()
                         .height(40.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(7.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box(modifier = Modifier
-                        .aspectRatio(1f)
-                    ) {
-                        SecondaryCircleButton(
-                            onClick = {
-                                webViewRef.value?.let { webView ->
-                                    if (webView.canGoBack()) {
-                                        webView.goBack()
-                                        immA?.DB?.updateWebViewURL(uuid, webView.originalUrl.toString())
-                                        urlInput.value = webView.originalUrl.toString()
-                                    } else if (urlInput.value != webView.url) {
-                                        webView.loadUrl(urlInput.value)
-                                        immA?.DB?.updateWebViewURL(uuid, urlInput.value)
-                                    }
+                    SecondaryCircleButton(
+                        onClick = {
+                            webViewRef.value?.let { webView ->
+                                if (webView.canGoBack()) {
+                                    webView.goBack()
+                                    immA?.DB?.updateWebViewURL(uuid, webView.originalUrl.toString())
+                                    urlInput.value = webView.originalUrl.toString()
+                                } else if (urlInput.value != webView.url) {
+                                    webView.loadUrl(urlInput.value)
+                                    immA?.DB?.updateWebViewURL(uuid, urlInput.value)
                                 }
-                            },
-                            icon = {
-                                Icon(
-                                    painterResource(id = R.drawable.back),
-                                    contentDescription = "Back",
-                                    tint = Color.Unspecified
-                                )
-                            },
-                        )
-                    }
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                painterResource(id = R.drawable.back),
+                                contentDescription = "Back",
+                                tint = Color.Unspecified
+                            )
+                        },
+                    )
+
+                    SecondaryCircleButton(
+                        onClick = {
+                            webViewRef.value?.let { webView ->
+                                webView.loadUrl(webView.url ?: "")
+                                urlInput.value = webView.url ?: ""
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                painterResource(id = R.drawable.refresh),
+                                contentDescription = "Refresh",
+                                tint = Color.Unspecified
+                            )
+                        },
+                    )
 
                     Box(modifier = Modifier
-                        .aspectRatio(1f)
-                    ) {
-                        SecondaryCircleButton(
-                            onClick = {
-                                webViewRef.value?.let { webView ->
-                                    webView.loadUrl(webView.url ?: "")
-                                    urlInput.value = webView.url ?: ""
-                                }
-                            },
-                            icon = {
-                                Icon(
-                                    painterResource(id = R.drawable.refresh),
-                                    contentDescription = "Refresh",
-                                    tint = Color.Unspecified
-                                )
-                            },
-                        )
-                    }
-
-                    Box(modifier = Modifier
-                        .fillMaxWidth(0.95f)
+                        .fillMaxWidth(0.945f)
                         .clip(SpatialTheme.shapes.large)
                         .background(Color.White)
                     ) {
@@ -144,27 +136,22 @@ fun WebViewPanel(
                         )
                     }
 
-                    Box(modifier = Modifier
-                        .aspectRatio(1f)
-                        .align(Alignment.Top)
-                    ) {
-                        SecondaryCircleButton(
-                            onClick = {
-                                immA?.DB?.deleteToolAsset(uuid)
-                                entity.destroy()
-                            },
-                            icon = {
-                                Icon(
-                                    painterResource(id = R.drawable.delete_task),
-                                    contentDescription = "Delete",
-                                    tint = Color.Unspecified
-                                )
-                            },
-                        )
-                    }
+                    SecondaryCircleButton(
+                        onClick = {
+                            immA?.DB?.deleteToolAsset(uuid)
+                            entity.destroy()
+                        },
+                        icon = {
+                            Icon(
+                                painterResource(id = R.drawable.delete_task),
+                                contentDescription = "Delete",
+                                tint = Color.Unspecified
+                            )
+                        },
+                    )
                 }
 
-                Spacer(modifier = Modifier.size(40.dp))
+                Spacer(modifier = Modifier.size(20.dp))
 
                 Box(
                     modifier = Modifier

@@ -185,12 +185,12 @@ class ImmersiveActivity : AppSystemActivity() {
             panelRegistration(PanelRegistrationIds.TasksPanel, 0.275f, 0.5f) { TasksPanel() },
             panelRegistration(PanelRegistrationIds.AIPanel, 0.3f, 0.5f) { AIPanel() },
             panelRegistration(PanelRegistrationIds.StickySubPanel, 0.26f, 0.042f) { StickySubPanel() },
-            panelRegistration(PanelRegistrationIds.LabelSubPanel, 0.44f, 0.042f) { LabelSubPanel() },
-            panelRegistration(PanelRegistrationIds.ArrowSubPanel, 0.28f, 0.042f) { ArrowSubPanel() },
-            panelRegistration(PanelRegistrationIds.BoardSubPanel, 0.21f, 0.042f) { BoardSubPanel() },
-            panelRegistration(PanelRegistrationIds.ShapesSubPanel, 0.28f, 0.042f) { ShapeSubPanel() },
-            panelRegistration(PanelRegistrationIds.StickerSubPanel, 0.29f, 0.042f) { StickerSubPanel() },
-            panelRegistration(PanelRegistrationIds.TimerSubPanel, 0.38f, 0.042f) { TimerSubPanel() },
+            panelRegistration(PanelRegistrationIds.LabelSubPanel, 0.46f, 0.042f) { LabelSubPanel() },
+            panelRegistration(PanelRegistrationIds.ArrowSubPanel, 0.24f, 0.042f) { ArrowSubPanel() },
+            panelRegistration(PanelRegistrationIds.BoardSubPanel, 0.18f, 0.042f) { BoardSubPanel() },
+            panelRegistration(PanelRegistrationIds.ShapesSubPanel, 0.25f, 0.042f) { ShapeSubPanel() },
+            panelRegistration(PanelRegistrationIds.StickerSubPanel, 0.25f, 0.042f) { StickerSubPanel() },
+            panelRegistration(PanelRegistrationIds.TimerSubPanel, 0.35f, 0.042f) { TimerSubPanel() },
         )
     }
 

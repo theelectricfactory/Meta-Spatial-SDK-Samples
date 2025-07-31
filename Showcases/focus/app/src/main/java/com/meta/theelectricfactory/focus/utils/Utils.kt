@@ -33,7 +33,7 @@ import com.meta.theelectricfactory.focus.data.shape3DSizeArray
 import com.meta.theelectricfactory.focus.viewmodels.FocusViewModel
 
 var temporalID: Int = 0
-const val FOCUS_DP: Int = 2200
+const val FOCUS_DP: Int = 1800
 
 // Creates temporal ids to identify entities during runtime
 fun getDisposableID(): Int {

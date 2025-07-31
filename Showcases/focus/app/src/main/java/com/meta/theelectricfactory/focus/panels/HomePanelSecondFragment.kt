@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -40,9 +41,14 @@ import com.meta.spatial.uiset.theme.SpatialTheme
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.meta.spatial.toolkit.Visible
 import com.meta.spatial.uiset.button.SecondaryCircleButton
+import com.meta.spatial.uiset.theme.LocalShapes
+import com.meta.spatial.uiset.tooltip.SpatialTooltipContent
 import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
 import com.meta.theelectricfactory.focus.ImmersiveActivity
@@ -90,38 +96,37 @@ fun HomePanelSecondFragmentScreen() {
                 ) {
                     Text(
                         text = "Project Settings",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 20.sp,
                     )
 
-                    Box(modifier = Modifier
-                        .aspectRatio(1f)
-                    ) {
-                        SecondaryCircleButton(
-                            icon = {
-                                Icon(
-                                    painterResource(id = R.drawable.close),
-                                    contentDescription = "Close",
-                                    tint = Color.Unspecified
-                                )
-                            },
-                            onClick = {
-                                // If we don't have a current project open, we return Home Panel first view.
-                                if (immA?.currentProject == null) {
-                                    projectNameInput.value = ""
-                                    immA?.newProject()
-                                    SecondFragment.instance.get()?.moveToFirstFragment()
-                                } else {
-                                    // If it's an old project, we update project info each time the user closes or changes a property
-                                    saveCurrentProject(projectNameInput, envSelected.intValue)
-                                }
+                    SecondaryCircleButton(
+                        icon = {
+                            Icon(
+                                painterResource(id = R.drawable.close),
+                                contentDescription = "Close",
+                                tint = Color.Unspecified
+                            )
+                        },
+                        onClick = {
+                            // If we don't have a current project open, we return Home Panel first view.
+                            if (immA?.currentProject == null) {
+                                projectNameInput.value = ""
+                                immA?.newProject()
+                                SecondFragment.instance.get()?.moveToFirstFragment()
+                            } else {
+                                // If it's an old project, we update project info each time the user closes or changes a property
+                                saveCurrentProject(projectNameInput, envSelected.intValue)
                             }
-                        )
-                    }
+                        }
+                    )
                 }
 
                 Spacer(modifier = Modifier.size(30.dp))
 
                 SpatialTheme(
-                    colorScheme = focusColorScheme(FocusColorSchemes.Gray)
+                    colorScheme = focusColorScheme(FocusColorSchemes.Gray),
+                    shapes = focusShapes(FocusShapes.FullRounded)
                 ) {
                     SpatialTextField(
                         modifier = Modifier
@@ -134,27 +139,27 @@ fun HomePanelSecondFragmentScreen() {
                     )
                 }
 
-                Spacer(modifier = Modifier.size(30.dp))
+                Spacer(modifier = Modifier.size(25.dp))
 
                 HorizontalDivider(
                     thickness = 1.dp,
-                    color = FocusColors.lightGray
+                    color = FocusColors.gray
                 )
 
-                Spacer(modifier = Modifier.size(30.dp))
+                Spacer(modifier = Modifier.size(25.dp))
 
                 Text(
                     text = "Select your environment",
                     color = FocusColors.darkGray,
-                    fontSize = 20.sp,
+                    fontSize = 15.sp,
                 )
 
-                Spacer(modifier = Modifier.size(15.dp))
+                Spacer(modifier = Modifier.size(5.dp))
 
                 LazyVerticalGrid(
-                    modifier = Modifier.height(480.dp),
+                    modifier = Modifier.height(375.dp),
                     columns = GridCells.Fixed(4),
-                    horizontalArrangement = Arrangement.spacedBy(20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(15.dp),
                 ) {
                     data class Environment(val name: String, val img: Int, val index: Int, val label: String)
                     val environments = listOf(
@@ -167,8 +172,8 @@ fun HomePanelSecondFragmentScreen() {
                     items(environments) { environment ->
                         Box(
                             modifier = Modifier
-                                .height(480.dp)
-                                .clip(SpatialTheme.shapes.medium)
+                                .height(375.dp)
+                                .clip(SpatialTheme.shapes.small)
                                 .selectable(
                                     selected = envSelected.intValue == environment.index,
                                     onClick = {
@@ -201,24 +206,27 @@ fun HomePanelSecondFragmentScreen() {
                                 text = environment.name,
                                 color = Color.White,
                                 lineHeight = 25.sp,
+                                fontSize = 18.sp,
+                                textAlign = TextAlign.Start,
                                 modifier = Modifier
-                                    .align(Alignment.TopStart)
-                                    .padding(30.dp).width(130.dp),
+                                    .padding(25.dp).width(120.dp),
                             )
 
                             Row(
                                 modifier = Modifier
-                                    .height(110.dp)
-                                    .padding(30.dp)
+                                    .width(100.dp)
+                                    .height(90.dp)
+                                    .padding(25.dp)
                                     .align(Alignment.TopEnd),
                             ) {
 
                                 SpatialTheme(
-                                    colorScheme = focusColorScheme(FocusColorSchemes.Gray)
+                                    colorScheme = focusColorScheme(FocusColorSchemes.GrayTooltip),
                                 ) {
-                                    PrimaryButton(
-                                        label = environment.label,
-                                        onClick = {}
+                                    SpatialTooltipContent(
+                                        modifier = Modifier
+                                            .clip(LocalShapes.current.xxSmall),
+                                        title = environment.label,
                                     )
                                 }
                             }

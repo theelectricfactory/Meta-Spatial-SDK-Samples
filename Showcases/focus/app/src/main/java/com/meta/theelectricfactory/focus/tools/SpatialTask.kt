@@ -68,7 +68,7 @@ class SpatialTask(
                     ) {
                         Box(
                             modifier = Modifier
-                                .padding(40.dp, 0.dp)
+                                .padding(20.dp, 0.dp)
                         ) {
                             TaskCard(
                                 task = task,

@@ -22,11 +22,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.meta.spatial.uiset.navigation.SpatialSideNavItem
+import com.meta.spatial.uiset.theme.LocalShapes
 import com.meta.spatial.uiset.theme.SpatialTheme
+import com.meta.spatial.uiset.theme.SpatialTheme.shapes
 import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
 import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.data.shapes
+import com.meta.theelectricfactory.focus.ui.FocusShapes
+import com.meta.theelectricfactory.focus.ui.focusShapes
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 
 @Composable
@@ -48,8 +53,7 @@ fun StickySubPanel() {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Sticky Notes",
-                    color = FocusColors.black,
+                    text = "Sticky Notes"
                 )
 
                 StickyButton("yellow", FocusColors.yellowStickyNote, {immA?.CreateStickyNote(0)})
@@ -69,22 +73,26 @@ fun StickyButton(
     color: Color,
     onClick: () -> Unit
 ) {
-    SpatialSideNavItem(
-        Modifier
-            .size(50.dp)
-            .fillMaxHeight()
-            .background(color, RoundedCornerShape(50.dp)),
-        icon = { Icon(
-            painterResource(id = R.drawable.transparent),
-            contentDescription = contentDescription,
-            tint = Color.Unspecified
-        )},
-        primaryLabel = "",
-        collapsed = true,
-        onClick = {
-            onClick()
-        }
-    )
+    SpatialTheme(
+        shapes = focusShapes(FocusShapes.FullRounded)
+    ) {
+        SpatialSideNavItem(
+            Modifier
+                .size(40.dp)
+                .fillMaxHeight()
+                .background(color, LocalShapes.current.large),
+            icon = { Icon(
+                painterResource(id = R.drawable.transparent),
+                contentDescription = contentDescription,
+                tint = Color.Unspecified
+            )},
+            primaryLabel = "",
+            collapsed = true,
+            onClick = {
+                onClick()
+            }
+        )
+    }
 }
 
 @Preview(
