@@ -84,7 +84,7 @@ fun HomePanelFirstFragmentScreen(projects: List<ProjectCardData>) {
 
                 HorizontalDivider(
                     thickness = 1.dp,
-                    color = FocusColors.lightGray
+                    color = FocusColors.gray
                 )
 
                 Spacer(modifier = Modifier.size(40.dp))
@@ -108,8 +108,8 @@ fun ProjectGrid(projects: List<ProjectCardData>, onDelete: (Int) -> Unit) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
         modifier = Modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.spacedBy(30.dp),
-        verticalArrangement = Arrangement.spacedBy(40.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         items(projects) { project ->
             ProjectCard(project, onDelete)
@@ -121,11 +121,12 @@ fun ProjectGrid(projects: List<ProjectCardData>, onDelete: (Int) -> Unit) {
 fun ProjectCard(project: ProjectCardData, onDelete: (Int) -> Unit) {
     Box {
         SpatialTheme(
-            colorScheme = focusColorScheme(FocusColorSchemes.Gray)
+            colorScheme = focusColorScheme(FocusColorSchemes.Gray),
+            shapes = focusShapes(FocusShapes.Squared)
         ) {
             TextTileButton(
                 modifier = Modifier
-                    .height(310.dp)
+                    .height(230.dp)
                     .fillMaxSize(),
                 label = project.name,
                 secondaryLabel = project.timeAgo,
@@ -136,10 +137,9 @@ fun ProjectCard(project: ProjectCardData, onDelete: (Int) -> Unit) {
         }
 
         Box(modifier = Modifier
-            .height(80.dp)
-            .aspectRatio(1f)
-            .padding(20.dp)
-            .align(Alignment.TopEnd)
+            .fillMaxSize()
+            .padding(15.dp),
+            contentAlignment = Alignment.TopEnd
         ) {
             SecondaryCircleButton(
                 icon = {

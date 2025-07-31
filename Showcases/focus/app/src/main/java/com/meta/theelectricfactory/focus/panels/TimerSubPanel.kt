@@ -45,47 +45,27 @@ fun TimerSubPanel() {
         ) {
             Row (
                 modifier = Modifier.fillMaxHeight(),
-                horizontalArrangement = Arrangement.spacedBy(15.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
 
                 Text(
-                    text = "Timer",
-                    color = FocusColors.black,
+                    text = "Timer"
                 )
 
-                TimerButton( R.drawable.timer1, {immA?.CreateTimer(0)})
-                TimerButton( R.drawable.timer2, {immA?.CreateTimer(1)})
-                TimerButton( R.drawable.timer3, {immA?.CreateTimer(2)})
-                TimerButton( R.drawable.timer4, {immA?.CreateTimer(3)})
-                TimerButton( R.drawable.timer5, {immA?.CreateTimer(4)})
-                TimerButton( R.drawable.timer6, {immA?.CreateTimer(5)})
+                ToolbarSubpanelButton( R.drawable.timer1, 80.dp, onClick = {immA?.CreateTimer(0)})
+                ToolbarSubpanelButton( R.drawable.timer2, 80.dp, onClick = {immA?.CreateTimer(1)})
+                ToolbarSubpanelButton( R.drawable.timer3, 80.dp, onClick = {immA?.CreateTimer(2)})
+                ToolbarSubpanelButton( R.drawable.timer4, 80.dp, onClick = {immA?.CreateTimer(3)})
+                ToolbarSubpanelButton( R.drawable.timer5, 80.dp, onClick = {immA?.CreateTimer(4)})
+                ToolbarSubpanelButton( R.drawable.timer6, 80.dp, onClick = {immA?.CreateTimer(5)})
             }
         }
     }
 }
 
-@Composable
-fun TimerButton( //TODO evaluar si no conviene que sean todos el mismo shape/arrow/board.etc
-    icon: Int,
-    onClick: () -> Unit
-) {
-
-    IconButton(
-        onClick = onClick,
-        modifier = Modifier
-            .width(100.dp),
-    ) {
-        Icon(
-            painterResource(id = icon),
-            contentDescription = "",
-            tint = Color.Unspecified,
-        )
-    }
-}
-
 @Preview(
-    widthDp = (0.38f * FOCUS_DP).toInt(),
+    widthDp = (0.35f * FOCUS_DP).toInt(),
     heightDp = (0.042f * FOCUS_DP).toInt(),
     uiMode = UI_MODE_TYPE_VR_HEADSET,
 )

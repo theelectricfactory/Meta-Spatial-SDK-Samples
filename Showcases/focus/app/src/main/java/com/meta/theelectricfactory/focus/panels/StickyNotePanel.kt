@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -18,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -44,11 +42,11 @@ fun StickyNotePanel(
     var messageInput = remember { mutableStateOf(message) }
     val (mainColor, lightColor) = getStickyColors(color)
 
-    var textSize = 25.sp
-    var lineHeight = 30.sp
+    var textSize = 19.sp
+    var lineHeight = 25.sp
     if (messageInput.value.length > 130) {
-        textSize = 20.sp
-        lineHeight = 22.sp
+        textSize = 17.sp
+        lineHeight = 21.sp
     }
 
     return FocusTheme {
@@ -57,7 +55,7 @@ fun StickyNotePanel(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .clip(LocalShapes.current.small)
+                    .clip(LocalShapes.current.xSmall)
                     .background(mainColor),
                 contentAlignment = Alignment.BottomCenter
             ) {
@@ -75,9 +73,10 @@ fun StickyNotePanel(
                     ) {
                         Row(
                             modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .padding(5.dp),
+                                .align(Alignment.TopCenter),
                         ) {
+                            //TODO
+                            
 //                            SpatialTextField(
 //                                modifier = Modifier
 //                                    .fillMaxWidth(),

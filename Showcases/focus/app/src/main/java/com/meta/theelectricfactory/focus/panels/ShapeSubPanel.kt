@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.meta.spatial.uiset.button.BorderlessCircleButton
 import com.meta.spatial.uiset.button.BorderlessIconButton
 import com.meta.spatial.uiset.theme.LocalColorScheme
 import com.meta.spatial.uiset.theme.SpatialTheme
@@ -44,43 +45,27 @@ fun ShapeSubPanel() {
         ) {
             Row (
                 modifier = Modifier.fillMaxHeight(),
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
 
                 Text(
-                    text = "Shapes",
-                    color = LocalColorScheme.current.primaryButton,
+                    text = "Shapes"
                 )
 
-                ShapeButton( R.drawable.shape1, {immA?.CreateShape(0)})
-                ShapeButton( R.drawable.shape2, {immA?.CreateShape(1)})
-                ShapeButton( R.drawable.shape3, {immA?.CreateShape(2)})
-                ShapeButton( R.drawable.shape4, {immA?.CreateShape(3)})
-                ShapeButton( R.drawable.shape5, {immA?.CreateShape(4)})
-                ShapeButton( R.drawable.shape6, {immA?.CreateShape(5)})
+                ToolbarSubpanelButton( R.drawable.shape1, onClick = {immA?.CreateShape(0)})
+                ToolbarSubpanelButton( R.drawable.shape2, onClick = {immA?.CreateShape(1)})
+                ToolbarSubpanelButton( R.drawable.shape3, onClick = {immA?.CreateShape(2)})
+                ToolbarSubpanelButton( R.drawable.shape4, onClick = {immA?.CreateShape(3)})
+                ToolbarSubpanelButton( R.drawable.shape5, onClick = {immA?.CreateShape(4)})
+                ToolbarSubpanelButton( R.drawable.shape6, onClick = {immA?.CreateShape(5)})
             }
         }
     }
 }
 
-@Composable
-fun ShapeButton( //TODO evaluar si no conviene que sean todos el mismo shape/arrow/board.etc
-    icon: Int,
-    onClick: () -> Unit
-) {
-    BorderlessIconButton(
-        icon = { Icon(
-            painterResource(id = icon),
-            contentDescription = "",
-            tint = Color.Unspecified
-        )},
-        onClick = onClick,
-    )
-}
-
 @Preview(
-    widthDp = (0.28f * FOCUS_DP).toInt(),
+    widthDp = (0.25f * FOCUS_DP).toInt(),
     heightDp = (0.042f * FOCUS_DP).toInt(),
     uiMode = UI_MODE_TYPE_VR_HEADSET,
 )

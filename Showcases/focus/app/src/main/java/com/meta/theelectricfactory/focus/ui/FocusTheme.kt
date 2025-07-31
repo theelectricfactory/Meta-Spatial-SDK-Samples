@@ -15,17 +15,20 @@ import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.spatial.uiset.theme.SpatialTypography
 import com.meta.spatial.uiset.theme.lightSpatialColorScheme
 import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.data.StickyColor
 
+// Defining settings for different color styles
 enum class FocusColorSchemes {
-    Main, Gray, BlueTooltip, PurpleTooltip, Transparent
+    Main, Gray, BlueTooltip, PurpleTooltip, GrayTooltip, Transparent
 }
 
+// Defining settings for different shapes styles
 enum class FocusShapes {
-    Main, Squared
+    Main, Squared, FullRounded
 }
 
 val focusFont = FontFamily(
@@ -40,6 +43,7 @@ val focusFont = FontFamily(
     Font(R.font.onest_thin, FontWeight.Thin),
 )
 
+// Defining colors used in the experience
 object FocusColors {
     val panel =
         Brush.verticalGradient(
@@ -69,7 +73,9 @@ object FocusColors {
     val selectedLightPurple = Color(0xFFEFEEFF)
 
     val black = Color(0xFF16161B)
+    val gray = Color(0xFFD4D4DC)
     val darkGray = Color(0xFF434152)
+    val darkGray2 = Color(0xFF59576D)
     val lightGray = Color(0xFFF1F0F3)
 
     val lightBlue = Color(0xFFECF6FF)
@@ -146,6 +152,11 @@ fun focusColorScheme(mode: FocusColorSchemes = FocusColorSchemes.Main): SpatialC
             primaryAlphaBackground = FocusColors.darkPurple,
             menu =  FocusColors.aiChat,
         )
+    } else if (mode == FocusColorSchemes.GrayTooltip) {
+        colorScheme = lightSpatialColorScheme().copy(
+            primaryAlphaBackground = Color.White, // Text of tooltip
+            menu =  FocusColors.darkGray2, // Background of tooltip
+        )
     }
 
     return colorScheme
@@ -154,14 +165,26 @@ fun focusColorScheme(mode: FocusColorSchemes = FocusColorSchemes.Main): SpatialC
 @Composable
 fun focusShapes(mode: FocusShapes = FocusShapes.Main): SpatialShapes {
     var shapes = SpatialShapes(
-        small = RoundedCornerShape(15.dp), // SpatialTextField
-        medium = RoundedCornerShape(24.dp), // TextTileButton
+        xxSmall = RoundedCornerShape(10.dp),
+        xSmall = RoundedCornerShape(14.dp),
+        small = RoundedCornerShape(18.dp), // SpatialTextField
+        medium = RoundedCornerShape(20.dp), // TextTileButton
         large = RoundedCornerShape(30.dp), // Panels, Tooltips, Buttons
     )
 
     if (mode == FocusShapes.Squared) {
         shapes = SpatialShapes(
-            large = RoundedCornerShape(15.dp),
+            small = RoundedCornerShape(10.dp),
+            medium = RoundedCornerShape(15.dp),
+            large = RoundedCornerShape(13.dp),
+        )
+    } else if (mode == FocusShapes.FullRounded) {
+        shapes = SpatialShapes(
+            xxSmall = RoundedCornerShape(50.dp),
+            xSmall = RoundedCornerShape(50.dp),
+            small = RoundedCornerShape(50.dp),
+            medium = RoundedCornerShape(50.dp),
+            large = RoundedCornerShape(50.dp),
         )
     }
     return shapes
@@ -172,36 +195,54 @@ fun focusTypo(): SpatialTypography {
 
     val typo = SpatialTypography(
         headline1 = LocalTypography.current.headline1.copy(
-            fontFamily = focusFont
+            fontFamily = focusFont,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
         ),
         headline2 = LocalTypography.current.headline2.copy(
-            fontFamily = focusFont
+            fontFamily = focusFont,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
         ),
         headline3 = LocalTypography.current.headline3.copy(
-            fontFamily = focusFont
+            fontFamily = focusFont,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
         ),
         body1 = LocalTypography.current.body1.copy( //primary button text
             fontFamily = focusFont,
-            //color = FocusColors.textColor,
-            fontSize = 20.sp),
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
+        ),
         body2 = LocalTypography.current.body2.copy( //secondary label text
             fontFamily = focusFont,
-            fontSize = 20.sp),
+            fontSize = 15.sp,
+        ),
         headline1Strong = LocalTypography.current.headline1.copy(
-            fontFamily = focusFont
+            fontFamily = focusFont,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
         ),
         headline2Strong = LocalTypography.current.headline2.copy(
-            fontFamily = focusFont
+            fontFamily = focusFont,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
         ),
         headline3Strong = LocalTypography.current.headline3.copy(
-            fontFamily = focusFont
+            fontFamily = focusFont,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
         ),
         body1Strong = LocalTypography.current.body1.copy( //Primary label text
             fontFamily = focusFont,
-            fontSize = 20.sp),
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
+        ),
         body2Strong = LocalTypography.current.body2.copy(
-            fontFamily = focusFont
-        ), //fontWeight = FontWeight.ExtraBold
+            fontFamily = focusFont,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
+        ),
     )
 
     return typo

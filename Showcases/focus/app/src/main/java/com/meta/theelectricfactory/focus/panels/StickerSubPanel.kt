@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.theelectricfactory.focus.ui.FocusColors
@@ -45,36 +46,36 @@ fun StickerSubPanel() {
         ) {
             Row (
                 modifier = Modifier.fillMaxHeight(),
-                horizontalArrangement = Arrangement.spacedBy(15.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
 
                 Text(
-                    text = "Stickers",
-                    color = FocusColors.black,
+                    text = "Stickers"
                 )
 
-                StickerButton( R.drawable.sticker1, {immA?.CreateSticker(0)})
-                StickerButton( R.drawable.sticker2, {immA?.CreateSticker(1)})
-                StickerButton( R.drawable.sticker3, {immA?.CreateSticker(2)})
-                StickerButton( R.drawable.sticker4, {immA?.CreateSticker(3)})
-                StickerButton( R.drawable.sticker5, {immA?.CreateSticker(4)})
-                StickerButton( R.drawable.sticker6, {immA?.CreateSticker(5)})
+                ToolbarSubpanelButton( R.drawable.sticker1, onClick = {immA?.CreateSticker(0)})
+                ToolbarSubpanelButton( R.drawable.sticker2, onClick = {immA?.CreateSticker(1)})
+                ToolbarSubpanelButton( R.drawable.sticker3, onClick = {immA?.CreateSticker(2)})
+                ToolbarSubpanelButton( R.drawable.sticker4, onClick = {immA?.CreateSticker(3)})
+                ToolbarSubpanelButton( R.drawable.sticker5, onClick = {immA?.CreateSticker(4)})
+                ToolbarSubpanelButton( R.drawable.sticker6, onClick = {immA?.CreateSticker(5)})
             }
         }
     }
 }
 
 @Composable
-fun StickerButton( //TODO evaluar si no conviene que sean todos el mismo shape/arrow/board.etc
+fun ToolbarSubpanelButton(
     icon: Int,
+    width: Dp = 45.dp,
     onClick: () -> Unit
 ) {
     IconButton(
         onClick = onClick,
         modifier = Modifier
             .fillMaxHeight()
-            .width(55.dp),
+            .width(width),
     ) {
         Icon(
             painterResource(id = icon),
@@ -85,7 +86,7 @@ fun StickerButton( //TODO evaluar si no conviene que sean todos el mismo shape/a
 }
 
 @Preview(
-    widthDp = (0.29f * FOCUS_DP).toInt(),
+    widthDp = (0.25f * FOCUS_DP).toInt(),
     heightDp = (0.042f * FOCUS_DP).toInt(),
     uiMode = UI_MODE_TYPE_VR_HEADSET,
 )

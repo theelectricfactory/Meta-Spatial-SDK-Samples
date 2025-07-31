@@ -18,8 +18,6 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +32,8 @@ import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.ui.FocusShapes
+import com.meta.theelectricfactory.focus.ui.focusShapes
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 import com.meta.theelectricfactory.focus.viewmodels.FocusViewModel
 
@@ -52,20 +52,20 @@ fun ToolbarPanel() {
         ) {
             Row (modifier = Modifier
                 .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box( Modifier
-                    .fillMaxWidth(0.26f)
+                    .fillMaxWidth(0.24f)
                     .fillMaxHeight()
-                    .clip(LocalShapes.current.large)
+                    .clip(LocalShapes.current.medium)
                     .background(SpatialTheme.colorScheme.panel)
-                    .padding(40.dp),
+                    .padding(20.dp),
                     contentAlignment = Alignment.Center
                 ) {
 
                     Row (
-                        horizontalArrangement = Arrangement.spacedBy(20.dp),
+                        horizontalArrangement = Arrangement.spacedBy(18.dp),
                     ) {
 
                         ToolbarButton(
@@ -103,13 +103,13 @@ fun ToolbarPanel() {
                 Box(Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .clip(LocalShapes.current.large)
+                    .clip(LocalShapes.current.medium)
                     .background(SpatialTheme.colorScheme.panel)
                     .padding(40.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Row (
-                        horizontalArrangement = Arrangement.spacedBy(20.dp),
+                        horizontalArrangement = Arrangement.spacedBy(18.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         ) {
                         ToolbarButton(
@@ -146,7 +146,7 @@ fun ToolbarPanel() {
 
                         VerticalDivider(
                             thickness = 1.dp,
-                            color = FocusColors.darkGray
+                            color = FocusColors.gray
                         )
 
                         ToolbarButton(
@@ -246,24 +246,27 @@ fun ToolbarButton(
         else -> color
     }
 
-    SpatialSideNavItem(
-        Modifier
-            .size(75.dp)
-            .fillMaxHeight()
-            .background(backgroundColor, LocalShapes.current.small)
-            .aspectRatio(1f),
-        icon = { Icon(
-            painterResource(id = icon),
-            contentDescription = contentDescription,
-            tint = Color.Unspecified
-        )},
-        primaryLabel = "",
-        collapsed = true,
-        selected = selected,
-        onClick = {
-            onClick()
-        }
-    )
+    SpatialTheme(shapes = focusShapes(FocusShapes.Squared)) {
+        SpatialSideNavItem(
+            Modifier
+                .size(60.dp)
+                .fillMaxHeight()
+                .background(backgroundColor, LocalShapes.current.small)
+                .aspectRatio(1f),
+            icon = { Icon(
+                painterResource(id = icon),
+                contentDescription = contentDescription,
+                tint = Color.Unspecified,
+                modifier = Modifier.fillMaxSize()
+            )},
+            primaryLabel = "",
+            collapsed = true,
+            selected = selected,
+            onClick = {
+                onClick()
+            }
+        )
+    }
 }
 
 @Preview(

@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.meta.spatial.uiset.button.BorderlessCircleButton
 import com.meta.spatial.uiset.button.BorderlessIconButton
 import com.meta.spatial.uiset.theme.LocalColorScheme
 import com.meta.spatial.uiset.theme.SpatialTheme
@@ -44,43 +45,27 @@ fun ArrowSubPanel() {
         ) {
             Row (
                 modifier = Modifier.fillMaxHeight(),
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
 
                 Text(
-                    text = "Arrows",
-                    color = LocalColorScheme.current.primaryButton,
+                    text = "Arrows"
                 )
 
-                ArrowButton( R.drawable.button_arrow1, {immA?.CreateArrowTool(0)})
-                ArrowButton( R.drawable.button_arrow2, {immA?.CreateArrowTool(1)})
-                ArrowButton( R.drawable.button_arrow3, {immA?.CreateArrowTool(2)})
-                ArrowButton( R.drawable.button_arrow4, {immA?.CreateArrowTool(3)})
-                ArrowButton( R.drawable.button_arrow5, {immA?.CreateArrowTool(4)})
-                ArrowButton( R.drawable.button_arrow6, {immA?.CreateArrowTool(5)})
+                ToolbarSubpanelButton( R.drawable.button_arrow1, onClick = {immA?.CreateArrowTool(0)})
+                ToolbarSubpanelButton( R.drawable.button_arrow2, onClick = {immA?.CreateArrowTool(1)})
+                ToolbarSubpanelButton( R.drawable.button_arrow3, onClick = {immA?.CreateArrowTool(2)})
+                ToolbarSubpanelButton( R.drawable.button_arrow4, onClick = {immA?.CreateArrowTool(3)})
+                ToolbarSubpanelButton( R.drawable.button_arrow5, onClick = {immA?.CreateArrowTool(4)})
+                ToolbarSubpanelButton( R.drawable.button_arrow6, onClick = {immA?.CreateArrowTool(5)})
             }
         }
     }
 }
 
-@Composable
-fun ArrowButton(
-    icon: Int,
-    onClick: () -> Unit
-) {
-    BorderlessIconButton(
-        icon = { Icon(
-            painterResource(id = icon),
-            contentDescription = "",
-            tint = Color.Unspecified
-        )},
-        onClick = onClick,
-    )
-}
-
 @Preview(
-    widthDp = (0.28f * FOCUS_DP).toInt(),
+    widthDp = (0.24f * FOCUS_DP).toInt(),
     heightDp = (0.042f * FOCUS_DP).toInt(),
     uiMode = UI_MODE_TYPE_VR_HEADSET,
 )

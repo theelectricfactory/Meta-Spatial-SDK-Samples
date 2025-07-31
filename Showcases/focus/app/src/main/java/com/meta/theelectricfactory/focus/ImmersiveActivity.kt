@@ -131,8 +131,6 @@ class ImmersiveActivity : AppSystemActivity() {
     var lastAIResponse = ""
     var waitingForAI = false
 
-    //val focusViewModel = FocusViewModel()
-
     override fun registerFeatures(): List<SpatialFeature> {
         val features =
             mutableListOf<SpatialFeature>(VRFeature(this), ComposeFeature(), IsdkFeature(this, spatial, systemManager))
@@ -187,12 +185,12 @@ class ImmersiveActivity : AppSystemActivity() {
             panelRegistration(PanelRegistrationIds.TasksPanel, 0.275f, 0.5f) { TasksPanel() },
             panelRegistration(PanelRegistrationIds.AIPanel, 0.3f, 0.5f) { AIPanel() },
             panelRegistration(PanelRegistrationIds.StickySubPanel, 0.26f, 0.042f) { StickySubPanel() },
-            panelRegistration(PanelRegistrationIds.LabelSubPanel, 0.44f, 0.042f) { LabelSubPanel() },
-            panelRegistration(PanelRegistrationIds.ArrowSubPanel, 0.28f, 0.042f) { ArrowSubPanel() },
-            panelRegistration(PanelRegistrationIds.BoardSubPanel, 0.21f, 0.042f) { BoardSubPanel() },
-            panelRegistration(PanelRegistrationIds.ShapesSubPanel, 0.28f, 0.042f) { ShapeSubPanel() },
-            panelRegistration(PanelRegistrationIds.StickerSubPanel, 0.29f, 0.042f) { StickerSubPanel() },
-            panelRegistration(PanelRegistrationIds.TimerSubPanel, 0.38f, 0.042f) { TimerSubPanel() },
+            panelRegistration(PanelRegistrationIds.LabelSubPanel, 0.46f, 0.042f) { LabelSubPanel() },
+            panelRegistration(PanelRegistrationIds.ArrowSubPanel, 0.24f, 0.042f) { ArrowSubPanel() },
+            panelRegistration(PanelRegistrationIds.BoardSubPanel, 0.18f, 0.042f) { BoardSubPanel() },
+            panelRegistration(PanelRegistrationIds.ShapesSubPanel, 0.25f, 0.042f) { ShapeSubPanel() },
+            panelRegistration(PanelRegistrationIds.StickerSubPanel, 0.25f, 0.042f) { StickerSubPanel() },
+            panelRegistration(PanelRegistrationIds.TimerSubPanel, 0.35f, 0.042f) { TimerSubPanel() },
         )
     }
 
@@ -251,7 +249,7 @@ class ImmersiveActivity : AppSystemActivity() {
 
     // Load project from scroll view in First Fragment
     @SuppressLint("Range")
-    public fun loadProject(id: Int) {
+    fun loadProject(id: Int) {
         homePanel.setComponent(Visible(false))
 
         if (currentProject?.uuid == id) return
@@ -449,6 +447,7 @@ class ImmersiveActivity : AppSystemActivity() {
         linkToolsWithParentBoards()
     }
 
+    // Link objects sticked to boards with their parent entities
     fun linkToolsWithParentBoards(spatialTask: Entity? = null) {
         var boards: MutableList<Entity> = mutableListOf()
 
@@ -635,8 +634,7 @@ class ImmersiveActivity : AppSystemActivity() {
         // We make this entity child to the speaker entity, to move them together, as one only object
         speakerState =
             Entity.create(
-                // hittable property should be NonCollision if we don't want to interact with it, nor
-                // block the parent entity
+                // hittable property should be NonCollision if we don't want to interact with it, nor block the parent entity
                 Mesh(Uri.parse("mesh://box")).apply { hittable = MeshCollision.NoCollision },
                 Box(Vector3(-size, -size, 0f), Vector3(size, size, 0f)),
                 Material().apply {
@@ -649,8 +647,7 @@ class ImmersiveActivity : AppSystemActivity() {
             )
     }
 
-    // Clock composed object created by two entities, one with a Mesh component and the other with a
-    // Panel component
+    // Clock composed object created by two entities, one with a Mesh component and the other with a Panel component
     private fun createClock() {
         val _width = 0.18f
         val _height = 0.18f
@@ -674,8 +671,7 @@ class ImmersiveActivity : AppSystemActivity() {
             Entity.create(
                 Panel(R.layout.clock_layout).apply { hittable = MeshCollision.NoCollision },
                 Transform(Pose(Vector3(0f, 0f, 0.035f), Quaternion(0f, 180f, 0f))),
-                // Adding TimeComponent to clock panel to be able to update it. More info in
-                // UpdateTimeSystem.kt
+                // Adding TimeComponent to clock panel to be able to update it. More info in UpdateTimeSystem.kt
                 TimeComponent(AssetType.CLOCK),
             )
 
@@ -775,8 +771,7 @@ class ImmersiveActivity : AppSystemActivity() {
         createDeleteButton()
     }
 
-    // Skybox is created after the app is initialized to improve performance. More info in
-    // GeneralSystem.kt
+    // Skybox is created after the app is initialized to improve performance. More info in GeneralSystem.kt
     fun createSkybox(res: Int) {
         skybox =
             Entity.create(
@@ -870,6 +865,20 @@ class ImmersiveActivity : AppSystemActivity() {
         skybox.setComponent(Visible(false))
     }
 
+    // TASKS Management
+    // TODO: Task Manager???
+
+    fun getSpatialTask(uuid: Int): Entity? {
+        val tools = Query.where { has(ToolComponent.id) }
+        for (entity in tools.eval()) {
+            val entityUuid = entity.getComponent<ToolComponent>().uuid
+            if (uuid == entityUuid) {
+                return entity
+            }
+        }
+        return null
+    }
+
     fun deleteTask(uuid: Int) {
         DB.deleteTask(uuid)
         FocusViewModel.instance.refreshTasksPanel()
@@ -889,33 +898,6 @@ class ImmersiveActivity : AppSystemActivity() {
         }
     }
 
-    fun getSpatialTask(uuid: Int): Entity? {
-        val tools = Query.where { has(ToolComponent.id) }
-        for (entity in tools.eval()) {
-            val entityUuid = entity.getComponent<ToolComponent>().uuid
-            if (uuid == entityUuid) {
-                return entity
-            }
-        }
-        return null
-    }
-
-    fun OpenHomePanel() {
-        // if second fragment is initialized and active, we change to First Fragment
-        try {
-            if (SecondFragment.instance.get()?.isCurrentlyVisible() == true) {
-                SecondFragment.instance.get()?.moveToFirstFragment()
-            } else {
-                FirstFragment.instance.get()?.refreshProjects()
-            }
-        } catch (e: UninitializedPropertyAccessException) {}
-        placeInFront(homePanel)
-        homePanel.setComponent(Visible(true))
-        ambientSoundPlayer.stop()
-
-        newProject()
-    }
-
     fun SwitchAudio() {
         if (speakerIsOn) {
             stopAmbientSound()
@@ -924,97 +906,11 @@ class ImmersiveActivity : AppSystemActivity() {
         }
     }
 
-    fun OpenSettingsPanel() {
-        // if first fragment is initialized and active, we change to Second Fragment
-        try {
-            if (FirstFragment.instance.get()?.isCurrentlyVisible() == true) {
-                FirstFragment.instance.get()?.moveToSecondFragment()
-            }
-        } catch (e: UninitializedPropertyAccessException) {}
-        placeInFront(homePanel)
-        homePanel.setComponent(Visible(true))
-    }
+    //////////////////////////
+    // PANEL ENTITIES CREATION
+    /////////////////////////
+    // TODO: Move to Panel Manager???
 
-    fun OpenWebView() {
-        WebView()
-    }
-
-    fun ShowAIPanel(state: Boolean = true) {
-        if (state) placeInFront(aiExchangePanel, bigPanel = true)
-        aiExchangePanel.setComponent(Visible(state))
-        DB.updateUniqueAsset(aiExchangePanel.getComponent<UniqueAssetComponent>().uuid, state = state)
-    }
-
-    fun ShowTasksPanel(state: Boolean = true) {
-        if (state) placeInFront(tasksPanel, bigPanel = true)
-        tasksPanel.setComponent(Visible(state))
-        DB.updateUniqueAsset(tasksPanel.getComponent<UniqueAssetComponent>().uuid, state = state)
-    }
-
-    fun CreateStickyNote(index: Int) {
-        StickyNote(
-            message = "",
-            color = StickyColor.entries[index])
-        closeSubPanels()
-    }
-
-    fun CreateLabelTool(index: Int) {
-        // Create Label tool
-        Tool(
-            type = AssetType.LABEL,
-            source = labels[index].toString(),
-            size = 0.065f,
-            deleteButtonHeight = 0.05f)
-        closeSubPanels()
-    }
-
-    fun CreateArrowTool(index: Int) {
-        // Create Arrow tool
-        Tool(
-            type = AssetType.ARROW,
-            source = arrows[index].toString(),
-            size = 0.1f,
-            deleteButtonHeight = getDeleteButtonHeight(AssetType.ARROW, index)
-        )
-        closeSubPanels()
-    }
-
-    fun CreateBoard(index: Int) {
-        // Create Board
-        Tool(
-            type = AssetType.BOARD,
-            source = boards[index].toString(),
-            size = getAssetSize(AssetType.BOARD, index),
-            deleteButtonHeight = getDeleteButtonHeight(AssetType.BOARD, index)
-        )
-        closeSubPanels()
-    }
-
-    fun CreateShape(index: Int) {
-        // Create Shape tool (2D or 3D)
-        val type = if (index % 2 == 0) AssetType.SHAPE_2D else AssetType.SHAPE_3D
-        val deleteHeight = if (index % 2 == 0) 0.08f else 0.12f
-        Tool(
-            type = type,
-            source = shapes[index].toString(),
-            size = getAssetSize(type, index),
-            deleteButtonHeight = deleteHeight)
-        closeSubPanels()
-    }
-
-    fun CreateSticker(index: Int) {
-        // Create Sticker tool
-        Tool(type = AssetType.STICKER, source = stickers[index].toString(), size = 0.04f)
-        closeSubPanels()
-    }
-
-    fun CreateTimer(index: Int) {
-        // Create Timer
-        Timer((index + 1) * 5)
-        closeSubPanels()
-    }
-
-    // Panels creation
     private fun createHomePanel() {
         homePanel =
             Entity.createPanelEntity(
@@ -1023,6 +919,29 @@ class ImmersiveActivity : AppSystemActivity() {
                 Grabbable(true, GrabbableType.FACE),
                 Visible(false)
             )
+    }
+
+    fun createTasksPanel() {
+        tasksPanel =
+            Entity.createPanelEntity(
+                PanelRegistrationIds.TasksPanel,
+                Transform(Pose(Vector3(0f))),
+                Grabbable(true, GrabbableType.FACE),
+                Visible(false),
+                // Empty UUID since the asset is not linked with any project for now
+                UniqueAssetComponent(type = AssetType.TASKS_PANEL))
+    }
+
+    // We create an AIExchangePanel chat to communicate with an AI assistant
+    fun createAIExchangePanel() {
+        aiExchangePanel =
+            Entity.createPanelEntity(
+                PanelRegistrationIds.AIPanel,
+                Transform(Pose(Vector3(0f))),
+                Grabbable(true, GrabbableType.FACE),
+                Visible(false),
+                // Empty UUID since the asset is not linked with any project for now
+                UniqueAssetComponent(type = AssetType.AI_PANEL))
     }
 
     fun createToolbarPanel() {
@@ -1126,28 +1045,121 @@ class ImmersiveActivity : AppSystemActivity() {
         if (!keepSelectedTool) FocusViewModel.instance.setSelectedTool(-1)
     }
 
-    fun createTasksPanel() {
-        tasksPanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.TasksPanel,
-                Transform(Pose(Vector3(0f))),
-                Grabbable(true, GrabbableType.FACE),
-                Visible(false),
-                // Empty UUID since the asset is not linked with any project for now
-                UniqueAssetComponent(type = AssetType.TASKS_PANEL))
+    // PANELS HANDLING FUNCTIONS
+
+    fun OpenHomePanel() {
+        // if second fragment is initialized and active, we change to First Fragment
+        try {
+            if (SecondFragment.instance.get()?.isCurrentlyVisible() == true) {
+                SecondFragment.instance.get()?.moveToFirstFragment()
+            } else {
+                FirstFragment.instance.get()?.refreshProjects()
+            }
+        } catch (e: UninitializedPropertyAccessException) {}
+        placeInFront(homePanel)
+        homePanel.setComponent(Visible(true))
+        ambientSoundPlayer.stop()
+
+        newProject()
     }
 
-    // We create an AIExchangePanel chat to communicate with an AI assistant
-    fun createAIExchangePanel() {
-        aiExchangePanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.AIPanel,
-                Transform(Pose(Vector3(0f))),
-                Grabbable(true, GrabbableType.FACE),
-                Visible(false),
-                // Empty UUID since the asset is not linked with any project for now
-                UniqueAssetComponent(type = AssetType.AI_PANEL))
+    fun OpenSettingsPanel() {
+        // if first fragment is initialized and active, we change to Second Fragment
+        try {
+            if (FirstFragment.instance.get()?.isCurrentlyVisible() == true) {
+                FirstFragment.instance.get()?.moveToSecondFragment()
+            }
+        } catch (e: UninitializedPropertyAccessException) {}
+        placeInFront(homePanel)
+        homePanel.setComponent(Visible(true))
     }
+
+    fun ShowTasksPanel(state: Boolean = true) {
+        if (state) placeInFront(tasksPanel, bigPanel = true)
+        tasksPanel.setComponent(Visible(state))
+        DB.updateUniqueAsset(tasksPanel.getComponent<UniqueAssetComponent>().uuid, state = state)
+    }
+
+    fun ShowAIPanel(state: Boolean = true) {
+        if (state) placeInFront(aiExchangePanel, bigPanel = true)
+        aiExchangePanel.setComponent(Visible(state))
+        DB.updateUniqueAsset(aiExchangePanel.getComponent<UniqueAssetComponent>().uuid, state = state)
+    }
+
+    fun OpenWebView() {
+        WebView()
+    }
+
+    /// TOOLS CREATION FUNCTIONS
+    // TODO: Move to Tool Manager???
+
+    fun CreateStickyNote(index: Int) {
+        StickyNote(
+            message = "",
+            color = StickyColor.entries[index])
+        closeSubPanels()
+    }
+
+    fun CreateLabelTool(index: Int) {
+        // Create Label tool
+        Tool(
+            type = AssetType.LABEL,
+            source = labels[index].toString(),
+            size = 0.065f,
+            deleteButtonHeight = 0.05f)
+        closeSubPanels()
+    }
+
+    fun CreateArrowTool(index: Int) {
+        // Create Arrow tool
+        Tool(
+            type = AssetType.ARROW,
+            source = arrows[index].toString(),
+            size = 0.1f,
+            deleteButtonHeight = getDeleteButtonHeight(AssetType.ARROW, index)
+        )
+        closeSubPanels()
+    }
+
+    fun CreateBoard(index: Int) {
+        // Create Board
+        Tool(
+            type = AssetType.BOARD,
+            source = boards[index].toString(),
+            size = getAssetSize(AssetType.BOARD, index),
+            deleteButtonHeight = getDeleteButtonHeight(AssetType.BOARD, index)
+        )
+        closeSubPanels()
+    }
+
+    fun CreateShape(index: Int) {
+        // Create Shape tool (2D or 3D)
+        val type = if (index % 2 == 0) AssetType.SHAPE_2D else AssetType.SHAPE_3D
+        val deleteHeight = if (index % 2 == 0) 0.08f else 0.12f
+        Tool(
+            type = type,
+            source = shapes[index].toString(),
+            size = getAssetSize(type, index),
+            deleteButtonHeight = deleteHeight)
+        closeSubPanels()
+    }
+
+    fun CreateSticker(index: Int) {
+        // Create Sticker tool
+        Tool(type = AssetType.STICKER, source = stickers[index].toString(), size = 0.04f)
+        closeSubPanels()
+    }
+
+    fun CreateTimer(index: Int) {
+        // Create Timer
+        Timer((index + 1) * 5)
+        closeSubPanels()
+    }
+
+    //////////////////////////
+    // AI Communication
+    /////////////////////////
+    // TODO: Move to AI Manager???
 
     // This function sends the questions of the user to the AI. More info in AIUtils.kt
     // and creates the corresponding messages in the chat panel

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -87,6 +88,7 @@ fun AIPanel() {
     var sendButtonIcon = remember { mutableIntStateOf(R.drawable.send) }
     val currentProjectUuid by FocusViewModel.instance.currentProjectUuid.collectAsState()
 
+    // Message list is cleared when the project changes
     LaunchedEffect(currentProjectUuid) {
         messagesList.clear()
     }
@@ -105,7 +107,7 @@ fun AIPanel() {
         Column {
             Row (modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .height(50.dp),
+                .height(40.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -118,27 +120,21 @@ fun AIPanel() {
                         title = "AI Exchange",
                     )
                 }
-
-                Box(modifier = Modifier
-                    .height(40.dp)
-                    .aspectRatio(1f)
-                ) {
-                    SecondaryCircleButton(
-                        onClick = {
-                            immA?.ShowAIPanel(false)
-                        },
-                        icon = {
-                            Icon(
-                                painterResource(id = R.drawable.close),
-                                contentDescription = "Close",
-                                tint = Color.Unspecified
-                            )
-                        },
-                    )
-                }
+                SecondaryCircleButton(
+                    onClick = {
+                        immA?.ShowAIPanel(false)
+                    },
+                    icon = {
+                        Icon(
+                            painterResource(id = R.drawable.close),
+                            contentDescription = "Close",
+                            tint = Color.Unspecified
+                        )
+                    },
+                )
             }
 
-            Spacer(modifier = Modifier.size(40.dp))
+            Spacer(modifier = Modifier.size(10.dp))
 
             Box(
                 modifier = Modifier
@@ -159,7 +155,7 @@ fun AIPanel() {
 
                         LazyColumn(
                             reverseLayout = true,
-                            contentPadding = PaddingValues(40.dp, 25.dp, 40.dp, 120.dp),
+                            contentPadding = PaddingValues(40.dp, 25.dp, 40.dp, 90.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             items(messagesList) { message ->
@@ -197,23 +193,23 @@ fun AIPanel() {
 
                     Box( modifier = Modifier
                         .fillMaxWidth()
-                        .height(190.dp)
+                        .height(200.dp)
                         .background(FocusColors.panel)
                     ) {
                         Row(
                             modifier = Modifier
                                 .align(Alignment.TopCenter)
-                                .padding(40.dp),
+                                .padding(20.dp),
                             verticalAlignment = Alignment.Bottom,
-                            horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally)
+                            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
                         ) {
                             SpatialTheme(
                                 colorScheme = focusColorScheme(FocusColorSchemes.Gray)
                             ) {
                                 SpatialTextField(
                                     modifier = Modifier
-                                        .width(460.dp)
-                                        .height(100.dp),
+                                        .width(380.dp)
+                                        .height(80.dp),
                                     label = "",
                                     placeholder = "Write a message",
                                     value = messageInput.value,
@@ -223,8 +219,8 @@ fun AIPanel() {
                             }
 
                             Box(modifier = Modifier
-                                .height(70.dp)
-                                .aspectRatio(1f)
+                                .height(50.dp)
+                                //.aspectRatio(1f)
                             ) {
                                 SpatialTheme(
                                     shapes = focusShapes(FocusShapes.Squared)
@@ -303,7 +299,7 @@ fun AiDisclaimerText() {
     }.toAnnotatedString()
 
     Box(
-        modifier = Modifier.padding(80.dp, 80.dp, 80.dp, 300.dp),
+        modifier = Modifier.padding(100.dp, 90.dp, 100.dp, 230.dp),
     ) {
         ClickableText(
             text = annotatedText,
@@ -315,7 +311,7 @@ fun AiDisclaimerText() {
             },
             style = TextStyle(
                 textAlign = TextAlign.Center,
-                fontSize = 25.sp,
+                fontSize = 20.sp,
                 lineHeight = 30.sp,
                 fontFamily = focusFont,
                 color = FocusColors.disabledPurple
@@ -338,7 +334,7 @@ fun ChatMessageItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 15.dp),
+            .padding(vertical = 10.dp),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -354,7 +350,7 @@ fun ChatMessageItem(
 
         Box(
             modifier = Modifier
-                .width(500.dp)
+                .width(400.dp)
                 .background(
                     brush = SolidColor(messageColor),
                     shape = RoundedCornerShape(16.dp)
@@ -364,8 +360,8 @@ fun ChatMessageItem(
         ) {
             Text(
                 text = message,
-                fontSize = 20.sp,
-                lineHeight = 25.sp,
+                fontSize = 18.sp,
+                lineHeight = 23.sp,
                 color = textColor,
                 fontFamily = focusFont
             )

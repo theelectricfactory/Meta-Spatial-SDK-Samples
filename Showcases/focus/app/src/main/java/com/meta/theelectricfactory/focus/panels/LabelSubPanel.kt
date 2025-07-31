@@ -18,7 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.meta.spatial.uiset.theme.SpatialTheme
@@ -47,20 +50,19 @@ fun LabelSubPanel() {
         ) {
             Row (
                 modifier = Modifier.fillMaxHeight(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Labels",
-                    color = FocusColors.black,
+                    text = "Labels"
                 )
 
-                LabelButton(stateLabels[0], {immA?.CreateLabelTool(0)})
-                LabelButton(stateLabels[1], {immA?.CreateLabelTool(1)})
-                LabelButton(stateLabels[2], {immA?.CreateLabelTool(2)})
-                LabelButton(priorityLabels[0], {immA?.CreateLabelTool(3)})
-                LabelButton(priorityLabels[1], {immA?.CreateLabelTool(4)})
-                LabelButton(priorityLabels[2], {immA?.CreateLabelTool(5)})
+                LabelButton(stateLabels[0], onClick = {immA?.CreateLabelTool(0)})
+                LabelButton(stateLabels[1], onClick = {immA?.CreateLabelTool(1)})
+                LabelButton(stateLabels[2], onClick = {immA?.CreateLabelTool(2)})
+                LabelButton(priorityLabels[0], onClick = {immA?.CreateLabelTool(3)})
+                LabelButton(priorityLabels[1], onClick = {immA?.CreateLabelTool(4)})
+                LabelButton(priorityLabels[2], onClick =  {immA?.CreateLabelTool(5)})
             }
         }
     }
@@ -69,11 +71,13 @@ fun LabelSubPanel() {
 @Composable
 fun LabelButton(
     label: Label,
+    fontSize: TextUnit = 12.sp,
+    height: Dp = 40.dp,
     onClick: () -> Unit
 ) {
 
     Button(
-        modifier = Modifier.height(50.dp),
+        modifier = Modifier.height(height),
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = label.containerColor,
@@ -83,14 +87,14 @@ fun LabelButton(
     ) {
         Text(
             text = label.description,
-            fontSize = 16.sp,
+            fontSize = fontSize,
             fontFamily = focusFont
         )
     }
 }
 
 @Preview(
-    widthDp = (0.44f * FOCUS_DP).toInt(),
+    widthDp = (0.46f * FOCUS_DP).toInt(),
     heightDp = (0.042f * FOCUS_DP).toInt(),
     uiMode = UI_MODE_TYPE_VR_HEADSET,
 )

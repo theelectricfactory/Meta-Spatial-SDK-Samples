@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import com.meta.spatial.core.Pose
 import com.meta.spatial.core.Quaternion
 import com.meta.spatial.core.Vector3
+import com.meta.spatial.uiset.button.BorderlessCircleButton
 import com.meta.spatial.uiset.button.BorderlessIconButton
 import com.meta.spatial.uiset.button.SecondaryCircleButton
 import com.meta.spatial.uiset.tooltip.SpatialTooltipContent
@@ -116,13 +117,10 @@ fun TasksPanel() {
     }
 
     return FocusTheme {
-        Column(
-            modifier = Modifier
-                .padding(5.dp),
-        ) {
+        Column {
             Row (modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .height(50.dp),
+                .height(40.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -136,31 +134,26 @@ fun TasksPanel() {
                     )
                 }
 
-                Box(modifier = Modifier
-                    .height(40.dp)
-                    .aspectRatio(1f)
-                ) {
-                    SecondaryCircleButton(
-                        onClick = {
-                            immA?.ShowTasksPanel(false)
-                        },
-                        icon = {
-                            Icon(
-                                painterResource(id = R.drawable.close),
-                                contentDescription = "Close",
-                                tint = Color.Unspecified
-                            )
-                        },
-                    )
-                }
+                SecondaryCircleButton(
+                    onClick = {
+                        immA?.ShowTasksPanel(false)
+                    },
+                    icon = {
+                        Icon(
+                            painterResource(id = R.drawable.close),
+                            contentDescription = "Close",
+                            tint = Color.Unspecified
+                        )
+                    },
+                )
             }
 
-            Spacer(modifier = Modifier.size(40.dp))
+            Spacer(modifier = Modifier.size(10.dp))
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(380.dp)
+                    .height(320.dp)
                     .clip(SpatialTheme.shapes.large)
                     .background(FocusColors.panel),
                 contentAlignment = Alignment.Center
@@ -168,19 +161,20 @@ fun TasksPanel() {
 
                 Column (
                     modifier = Modifier
-                        .padding(30.dp)
+                        .padding(25.dp)
                 ) {
 
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     )
                     {
-                        LabelButton(stateLabels[templateTaskState.intValue], { switchLabel(templateTaskState) })
-                        LabelButton(priorityLabels[templateTaskPriority.intValue], { switchLabel(templateTaskPriority) })
+                        LabelButton(stateLabels[templateTaskState.intValue], 16.sp, 45.dp, { switchLabel(templateTaskState) })
+                        LabelButton(priorityLabels[templateTaskPriority.intValue], 16.sp, 45.dp, { switchLabel(templateTaskPriority) })
                     }
 
-                    Spacer(modifier = Modifier.size(20.dp))
+                    Spacer(modifier = Modifier.size(10.dp))
 
+                    // TODO
                     //                SpatialTextField(
 //                    label = "",
 //                    placeholder = "Add text",
@@ -204,10 +198,10 @@ fun TasksPanel() {
                             Text(
                                 text ="Task title",
                                 fontFamily = focusFont,
-                                fontSize = 28.sp,
+                                fontSize = 23.sp,
                             )},
                         textStyle = TextStyle(
-                            fontSize = 28.sp,
+                            fontSize = 23.sp,
                             fontFamily = focusFont
                         ),
                         colors = TextFieldDefaults.colors(
@@ -222,18 +216,18 @@ fun TasksPanel() {
                     TextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(0.55f),
+                            .fillMaxHeight(0.6f),
                         value = textInput.value,
                         onValueChange = { textInput.value = it },
                         placeholder = {
                             Text(
                                 text ="Add text",
                                 fontFamily = focusFont,
-                                fontSize = 20.sp,
+                                fontSize = 16.sp,
                                 color = FocusColors.darkGray
                             )},
                         textStyle = TextStyle(
-                            fontSize = 20.sp,
+                            fontSize = 16.sp,
                             fontFamily = focusFont,
                             color = FocusColors.darkGray
                         ),
@@ -245,7 +239,7 @@ fun TasksPanel() {
                         ),
                     )
 
-                    Spacer(modifier = Modifier.size(20.dp))
+                    Spacer(modifier = Modifier.size(10.dp))
 
                     SpatialTheme(
                         shapes = focusShapes(FocusShapes.Squared)
@@ -286,7 +280,8 @@ fun TasksPanel() {
                 contentAlignment = Alignment.TopCenter
             ) {
                 LazyColumn(
-                    contentPadding = PaddingValues(30.dp, 10.dp),
+                    contentPadding = PaddingValues(30.dp, 30.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
                 ) {
                     items(tasksList, key = { it.uuid }) { task ->
                         TaskCard(task)
@@ -314,13 +309,12 @@ fun TaskCard(
 ) {
 
     val immA = ImmersiveActivity.getInstance()
-    val key = "init_${task.uuid}" //TODO
 
-    var taskLabelState = remember(key) { mutableIntStateOf(task.state) }
-    var taskLabelPriority = remember(key) { mutableIntStateOf(task.priority) }
+    var taskLabelState = remember() { mutableIntStateOf(task.state) }
+    var taskLabelPriority = remember() { mutableIntStateOf(task.priority) }
 
-    var taskTitleInput = remember(key) { mutableStateOf(task.title) }
-    var taskBodyInput = remember(key) { mutableStateOf(task.body) }
+    var taskTitleInput = remember() { mutableStateOf(task.title) }
+    var taskBodyInput = remember() { mutableStateOf(task.body) }
 
     val taskUpdated by FocusViewModel.instance.currentTaskUpdated.collectAsState()
     LaunchedEffect(taskUpdated) {
@@ -354,7 +348,7 @@ fun TaskCard(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    LabelButton(stateLabels[taskLabelState.intValue], {
+                    LabelButton(stateLabels[taskLabelState.intValue], 16.sp, 45.dp, {
                         var newState = taskLabelState.intValue + 1
                         if (newState > 2) newState = 0
                         taskLabelState.intValue = newState
@@ -372,7 +366,7 @@ fun TaskCard(
                         }
                     })
 
-                    LabelButton(priorityLabels[taskLabelPriority.intValue], {
+                    LabelButton(priorityLabels[taskLabelPriority.intValue], 16.sp, 45.dp, {
                         var newPriority = taskLabelPriority.intValue + 1
                         if (newPriority > 2) newPriority = 0
                         taskLabelPriority.intValue = newPriority
@@ -403,7 +397,7 @@ fun TaskCard(
                 ) {
 
                     if (task.detached == 0 && !isSpatial) {
-                        BorderlessIconButton(
+                        BorderlessCircleButton(
                             icon = {
                                 Icon(
                                     painterResource(id = R.drawable.detach),
@@ -430,7 +424,7 @@ fun TaskCard(
                         )
                     }
 
-                    BorderlessIconButton(
+                    BorderlessCircleButton(
                         icon = {
                             Icon(
                                 painterResource(id = R.drawable.delete_task),
@@ -446,7 +440,7 @@ fun TaskCard(
             }
         }
 
-        Spacer(modifier = Modifier.size(20.dp))
+        Spacer(modifier = Modifier.size(10.dp))
 
         TextField(
             modifier = Modifier
@@ -481,7 +475,7 @@ fun TaskCard(
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(110.dp),
+                .height(90.dp),
             value = taskBodyInput.value,
             onValueChange = { taskBodyInput.value = it },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -497,7 +491,7 @@ fun TaskCard(
                 }
             ),
             textStyle = TextStyle(
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 fontFamily = focusFont,
                 color = FocusColors.darkGray
             ),
@@ -509,11 +503,11 @@ fun TaskCard(
             ),
         )
 
-        Spacer(modifier = Modifier.size(20.dp))
+        Spacer(modifier = Modifier.size(10.dp))
 
         if (!isSpatial) HorizontalDivider(
             thickness = 1.dp,
-            color = Color(0xFFD4D3DC)
+            color = FocusColors.gray
         )
     }
 
@@ -537,5 +531,6 @@ fun TaskCard(
 )
 @Composable
 fun TasksPanelPreview() {
+    var task = Task(1, "Task one", "This is the body of task one.", 0, 1, 0, 0, Pose(Vector3(0f, 0f, 0f), Quaternion(1f, 0f, 0f, 0f)))
     TasksPanel()
 }
