@@ -1,3 +1,5 @@
+// (c) Meta Platforms, Inc. and affiliates. Confidential and proprietary.
+
 package com.meta.theelectricfactory.focus
 
 // Enum with all asset types in the app

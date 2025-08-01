@@ -23,6 +23,7 @@ import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.TimeComponent
 import com.meta.theelectricfactory.focus.ToolComponent
+import com.meta.theelectricfactory.focus.managers.AudioManager
 import com.meta.theelectricfactory.focus.utils.addDeleteButton
 import com.meta.theelectricfactory.focus.utils.getDisposableID
 import com.meta.theelectricfactory.focus.utils.placeInFront
@@ -87,6 +88,6 @@ class Timer(totalTime: Int) {
         placeInFront(timerObj)
         // We add a listener to show delete button when entity is selected
         addDeleteButton(timerObj)
-        immA?.playCreationSound(timerObj.getComponent<Transform>().transform.t)
+        AudioManager.instance.playCreationSound(timerObj.getComponent<Transform>().transform.t)
     }
 }

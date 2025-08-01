@@ -1,3 +1,5 @@
+// (c) Meta Platforms, Inc. and affiliates. Confidential and proprietary.
+
 package com.meta.theelectricfactory.focus.managers
 
 import com.meta.spatial.core.Entity
@@ -14,7 +16,7 @@ data class Task(val uuid: Int, var title: String, val body: String, var state: I
 
 class TasksManager {
 
-    var immA = ImmersiveActivity.getInstance()
+    val immA: ImmersiveActivity? get() = ImmersiveActivity.getInstance()
 
     companion object {
         val instance: TasksManager by lazy { TasksManager() }
@@ -46,7 +48,7 @@ class TasksManager {
             }
 
             ent.destroy()
-            immA?.scene?.playSound(immA!!.deleteSound, PanelManager.instance.tasksPanel.getComponent<Transform>().transform.t, 1f)
+            AudioManager.instance.playDeleteSound(PanelManager.instance.tasksPanel.getComponent<Transform>().transform.t)
         }
     }
 }

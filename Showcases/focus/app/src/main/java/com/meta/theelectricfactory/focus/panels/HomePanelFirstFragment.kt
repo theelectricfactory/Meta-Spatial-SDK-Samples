@@ -38,6 +38,8 @@ import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
 import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.managers.AudioManager
+import com.meta.theelectricfactory.focus.managers.ProjectManager
 import com.meta.theelectricfactory.focus.ui.FocusColorSchemes
 import com.meta.theelectricfactory.focus.ui.FocusShapes
 import com.meta.theelectricfactory.focus.ui.focusColorScheme
@@ -72,7 +74,7 @@ fun HomePanelFirstFragmentScreen(projects: List<ProjectCardData>) {
                     PrimaryButton(
                         label = "+ New Project",
                         onClick = {
-                            immA?.newProject()
+                            ProjectManager.instance.newProject()
                             FirstFragment.instance.get()?.moveToSecondFragment()
                         },
                         expanded = true
@@ -91,7 +93,7 @@ fun HomePanelFirstFragmentScreen(projects: List<ProjectCardData>) {
                 ProjectGrid(
                     projects = projects,
                     onDelete = { uuid ->
-                        immA?.scene?.playSound(immA.deleteSound, 1f)
+                        AudioManager.instance.playDeleteSound()
 
                         immA?.DB?.deleteProject(uuid)
                         FirstFragment.instance.get()?.refreshProjects()
@@ -130,7 +132,7 @@ fun ProjectCard(project: ProjectCardData, onDelete: (Int) -> Unit) {
                 label = project.name,
                 secondaryLabel = project.timeAgo,
                 onSelectionChange = {
-                    ImmersiveActivity.getInstance()?.loadProject(project.uuid)
+                    ProjectManager.instance.loadProject(project.uuid)
                 }
             )
         }

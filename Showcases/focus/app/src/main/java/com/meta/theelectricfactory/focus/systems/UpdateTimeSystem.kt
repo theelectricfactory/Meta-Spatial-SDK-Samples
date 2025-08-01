@@ -14,6 +14,8 @@ import com.meta.theelectricfactory.focus.AssetType
 import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.TimeComponent
+import com.meta.theelectricfactory.focus.managers.AudioManager
+import com.meta.theelectricfactory.focus.managers.ProjectManager
 import com.meta.theelectricfactory.focus.utils.deleteObject
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -33,7 +35,7 @@ class UpdateTimeSystem : SystemBase() {
         val currentTime = System.currentTimeMillis()
 
         // if there is no current project, we don't update clock
-        if (immA?.currentProject == null) {
+        if (ProjectManager.instance.currentProject == null) {
             lastTime = currentTime
         }
 
@@ -103,12 +105,12 @@ class UpdateTimeSystem : SystemBase() {
             asset.complete = true
             asset.loop = 1
             entity.setComponent(asset)
-            immA?.scene?.playSound(immA.timerSound, entity, 1f)
+            AudioManager.instance.playTimerSound(entity)
             // Make the timer sound 3 times
         } else if (asset.complete &&
             ((asset.loop == 1 && (timeLeft / 1000) < -2) ||
                     (asset.loop == 2 && (timeLeft / 1000) < -4))) {
-            immA?.scene?.playSound(immA.timerSound, entity, 1f)
+            AudioManager.instance.playTimerSound(entity)
             asset.loop += 1
             entity.setComponent(asset)
             // We delete the timer 6 seconds after it finishes

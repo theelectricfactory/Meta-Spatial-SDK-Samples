@@ -15,6 +15,8 @@ import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.data.StickyColor
 import com.meta.theelectricfactory.focus.ToolComponent
+import com.meta.theelectricfactory.focus.managers.AudioManager
+import com.meta.theelectricfactory.focus.managers.ProjectManager
 import com.meta.theelectricfactory.focus.panels.StickyNotePanel
 import com.meta.theelectricfactory.focus.utils.addDeleteButton
 import com.meta.theelectricfactory.focus.utils.getDisposableID
@@ -44,12 +46,12 @@ class StickyNote(
             uuid = getNewUUID()
             immA?.DB?.createSticky(
                 uuid,
-                immA?.currentProject?.uuid,
+                ProjectManager.instance.currentProject?.uuid,
                 color,
                 message,
                 sticky.getComponent<Transform>().transform
             )
-            immA?.playCreationSound(sticky.getComponent<Transform>().transform.t)
+            AudioManager.instance.playCreationSound(sticky.getComponent<Transform>().transform.t)
         }
 
         // Register the panel

@@ -38,7 +38,7 @@ import com.meta.theelectricfactory.focus.viewmodels.FocusViewModel
 
 class PanelManager {
 
-    var immA = ImmersiveActivity.getInstance()
+    val immA: ImmersiveActivity? get() = ImmersiveActivity.getInstance()
 
     // PANELS
     lateinit var homePanel: Entity
@@ -288,8 +288,8 @@ class PanelManager {
 
         placeInFront(homePanel)
         homePanel.setComponent(Visible(true))
-        immA?.ambientSoundPlayer?.stop()
-        immA?.newProject()
+        AudioManager.instance.ambientSoundPlayer.stop()
+        ProjectManager.instance.newProject()
     }
 
     fun openSettingsPanel() {

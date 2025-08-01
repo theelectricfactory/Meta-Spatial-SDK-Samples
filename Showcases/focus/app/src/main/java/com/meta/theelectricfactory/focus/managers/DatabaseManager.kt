@@ -235,7 +235,7 @@ class DatabaseManager(ctx: Context) : SQLiteOpenHelper(ctx, DATABASE_NAME, null,
 
     fun updateLastTimeOpen() {
         // We save last time the user interacted with elements in the project to show this info in the Home Panel
-        if (immA?.currentProject == null) return
+        if (ProjectManager.instance.currentProject == null) return
         val db = writableDatabase
         val values =
             ContentValues().apply { put(PROJECT_LAST_OPENING, System.currentTimeMillis().toString()) }
@@ -243,7 +243,7 @@ class DatabaseManager(ctx: Context) : SQLiteOpenHelper(ctx, DATABASE_NAME, null,
             PROJECTS_TABLE,
             values,
             "$PROJECT_UUID=?",
-            arrayOf(immA.currentProject?.uuid.toString()))
+            arrayOf(ProjectManager.instance.currentProject?.uuid.toString()))
         db.close()
     }
 

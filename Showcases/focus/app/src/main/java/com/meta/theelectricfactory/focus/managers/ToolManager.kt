@@ -1,3 +1,5 @@
+// (c) Meta Platforms, Inc. and affiliates. Confidential and proprietary.
+
 package com.meta.theelectricfactory.focus.managers
 
 import com.meta.spatial.core.Entity

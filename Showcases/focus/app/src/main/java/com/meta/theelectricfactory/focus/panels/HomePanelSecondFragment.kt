@@ -52,6 +52,7 @@ import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.fragments.SecondFragment
+import com.meta.theelectricfactory.focus.managers.ProjectManager
 import com.meta.theelectricfactory.focus.ui.FocusColorSchemes
 import com.meta.theelectricfactory.focus.ui.FocusShapes
 import com.meta.theelectricfactory.focus.ui.focusColorScheme
@@ -61,18 +62,16 @@ import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 @Composable
 fun HomePanelSecondFragmentScreen() {
 
-    var immA = ImmersiveActivity.getInstance()
-
-    var saveButtonLabel = if (immA?.currentProject != null) "Save project" else "Create project"
+    var saveButtonLabel = if (ProjectManager.instance.currentProject != null) "Save project" else "Create project"
     var projectNameInput = remember {
         mutableStateOf(
-            if (immA?.currentProject != null) immA.currentProject!!.name
+            if (ProjectManager.instance.currentProject != null) ProjectManager.instance.currentProject!!.name
             else ""
         )
     }
     var envSelected = remember {
         mutableIntStateOf(
-            if (immA?.currentProject != null && !immA.currentProject!!.MR) immA.currentProject?.environment!!
+            if (ProjectManager.instance.currentProject != null && !ProjectManager.instance.currentProject!!.MR) ProjectManager.instance.currentProject?.environment!!
             else 3
         )
     }
@@ -108,9 +107,9 @@ fun HomePanelSecondFragmentScreen() {
                         },
                         onClick = {
                             // If we don't have a current project open, we return Home Panel first view.
-                            if (immA?.currentProject == null) {
+                            if (ProjectManager.instance.currentProject == null) {
                                 projectNameInput.value = ""
-                                immA?.newProject()
+                                ProjectManager.instance.newProject()
                                 SecondFragment.instance.get()?.moveToFirstFragment()
                             } else {
                                 // If it's an old project, we update project info each time the user closes or changes a property
@@ -175,9 +174,9 @@ fun HomePanelSecondFragmentScreen() {
                                 .selectable(
                                     selected = envSelected.intValue == environment.index,
                                     onClick = {
-                                        if (immA?.currentProject != null) {
-                                            immA.currentProject!!.environment = environment.index
-                                            immA.saveProjectSettings(envSelected.intValue != 3, projectNameInput.value)
+                                        if (ProjectManager.instance.currentProject != null) {
+                                            ProjectManager.instance.currentProject!!.environment = environment.index
+                                            ProjectManager.instance.saveProjectSettings(envSelected.intValue != 3, projectNameInput.value)
                                         }
                                         envSelected.intValue = environment.index
                                     },
@@ -266,7 +265,7 @@ fun saveCurrentProject(
         projectNameInput.value = "Untitled"
     }
 
-    ImmersiveActivity.getInstance()?.saveProjectSettings(envSelected == 3, projectNameInput.value)
+    ProjectManager.instance.saveProjectSettings(envSelected == 3, projectNameInput.value)
     PanelManager.instance.homePanel.setComponent(Visible(false))
 }
 

@@ -10,6 +10,7 @@ import com.meta.theelectricfactory.focus.AssetType
 import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.ToolComponent
 import com.meta.theelectricfactory.focus.UniqueAssetComponent
+import com.meta.theelectricfactory.focus.managers.ProjectManager
 
 // Custom system created to update the poses of the objects that had been moved in the database
 class DatabaseUpdateSystem : SystemBase() {
@@ -24,7 +25,7 @@ class DatabaseUpdateSystem : SystemBase() {
         val currentTime = System.currentTimeMillis()
 
         // if there is no current project, we don't update database
-        if (immA?.currentProject == null) {
+        if (ProjectManager.instance.currentProject == null) {
             lastTime = currentTime
         }
 

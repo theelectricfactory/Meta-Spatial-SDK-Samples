@@ -34,6 +34,7 @@ import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
 import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.managers.AIManager
+import com.meta.theelectricfactory.focus.managers.AudioManager
 import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.ui.FocusShapes
 import com.meta.theelectricfactory.focus.ui.focusShapes
@@ -87,7 +88,7 @@ fun ToolbarPanel() {
                             false,
                             color = FocusColors.lightGray,
                             onClick = {
-                                immA?.SwitchAudio()
+                                AudioManager.instance.switchAudio()
                             }
                         )
 

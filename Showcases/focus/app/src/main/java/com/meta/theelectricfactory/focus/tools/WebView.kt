@@ -13,6 +13,7 @@ import com.meta.theelectricfactory.focus.AssetType
 import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.ToolComponent
+import com.meta.theelectricfactory.focus.managers.ProjectManager
 import com.meta.theelectricfactory.focus.panels.WebViewPanel
 import com.meta.theelectricfactory.focus.utils.getDisposableID
 import com.meta.theelectricfactory.focus.utils.getNewUUID
@@ -40,7 +41,7 @@ class WebView(
             uuid = getNewUUID()
             immA?.DB?.createToolAsset(
                 uuid,
-                immA?.currentProject?.uuid,
+                ProjectManager.instance.currentProject?.uuid,
                 AssetType.WEB_VIEW,
                 url,
                 0f, // not relevant

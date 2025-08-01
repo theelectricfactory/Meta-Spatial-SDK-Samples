@@ -67,6 +67,7 @@ import com.meta.theelectricfactory.focus.utils.getNewUUID
 import com.meta.theelectricfactory.focus.ui.focusFont
 import com.meta.theelectricfactory.focus.data.priorityLabels
 import com.meta.theelectricfactory.focus.data.stateLabels
+import com.meta.theelectricfactory.focus.managers.ProjectManager
 import com.meta.theelectricfactory.focus.ui.FocusColorSchemes
 import com.meta.theelectricfactory.focus.ui.FocusShapes
 import com.meta.theelectricfactory.focus.ui.focusColorScheme
@@ -87,7 +88,7 @@ fun TasksPanel() {
     val tasksListHasChanged by FocusViewModel.instance.tasksListsHasChanged.collectAsState()
     LaunchedEffect(tasksListHasChanged) {
         tasksList.clear()
-        val cursor = immA?.DB?.getTasks(immA.currentProject?.uuid)
+        val cursor = immA?.DB?.getTasks(ProjectManager.instance.currentProject?.uuid)
         if (cursor != null && cursor.moveToFirst()) {
             while (!cursor.isAfterLast) {
                 val uuid = cursor.getInt(cursor.getColumnIndex(DatabaseManager.TASK_UUID))
@@ -234,7 +235,7 @@ fun TasksPanel() {
                                 val _uuid = getNewUUID()
                                 immA?.DB?.createTask(
                                     _uuid,
-                                    immA.currentProject?.uuid,
+                                    ProjectManager.instance.currentProject?.uuid,
                                     titleInput.value,
                                     textInput.value,
                                     templateTaskState.intValue,

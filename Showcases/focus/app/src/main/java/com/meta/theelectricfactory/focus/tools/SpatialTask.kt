@@ -28,6 +28,7 @@ import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.managers.Task
 import com.meta.theelectricfactory.focus.ToolComponent
+import com.meta.theelectricfactory.focus.managers.AudioManager
 import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.panels.TaskCard
 import com.meta.theelectricfactory.focus.ui.FocusColors
@@ -102,6 +103,6 @@ class SpatialTask(
             }
         }
 
-        if (new) immA?.playCreationSound(taskPanelEntity.getComponent<Transform>().transform.t)
+        if (new) AudioManager.instance.playCreationSound(taskPanelEntity.getComponent<Transform>().transform.t)
     }
 }

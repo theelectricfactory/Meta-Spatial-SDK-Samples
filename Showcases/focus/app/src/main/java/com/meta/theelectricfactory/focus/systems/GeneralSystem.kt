@@ -13,6 +13,7 @@ import com.meta.spatial.toolkit.Visible
 import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.managers.AudioManager
 import com.meta.theelectricfactory.focus.utils.getHeadPose
 import com.meta.theelectricfactory.focus.utils.placeInFront
 
@@ -56,9 +57,9 @@ class GeneralSystem() : SystemBase() {
             }
 
         // If the ambient audio in On, we update the position vector of the ambientSoundPlayer with the Speaker position
-        } else if (immA?.speakerIsOn == true) {
-            val pos = immA.speaker.getComponent<Transform>().transform.t
-            immA.ambientSoundPlayer.setPosition(pos)
+        } else if (AudioManager.instance.audioIsOn == true) {
+            val pos = immA?.speaker!!.getComponent<Transform>().transform.t
+            AudioManager.instance.ambientSoundPlayer.setPosition(pos)
         }
 
         // Toolbar can be called anytime with B or Y button of controllers

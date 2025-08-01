@@ -18,6 +18,8 @@ import com.meta.theelectricfactory.focus.AssetType
 import com.meta.theelectricfactory.focus.AttachableComponent
 import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.ToolComponent
+import com.meta.theelectricfactory.focus.managers.AudioManager
+import com.meta.theelectricfactory.focus.managers.ProjectManager
 import com.meta.theelectricfactory.focus.utils.addDeleteButton
 import com.meta.theelectricfactory.focus.utils.getNewUUID
 import com.meta.theelectricfactory.focus.utils.placeInFront
@@ -85,14 +87,14 @@ class Tool(
             uuid = getNewUUID()
             immA?.DB?.createToolAsset(
                 uuid,
-                immA.currentProject?.uuid,
+                ProjectManager.instance.currentProject?.uuid,
                 type,
                 source,
                 size,
                 deleteButtonHeight,
                 obj.getComponent<Transform>().transform
             )
-            immA?.playCreationSound(obj.getComponent<Transform>().transform.t)
+            AudioManager.instance.playCreationSound(obj.getComponent<Transform>().transform.t)
         }
 
         // We add it a ToolComponent to be able to identify it and get the type and uuid of the entity

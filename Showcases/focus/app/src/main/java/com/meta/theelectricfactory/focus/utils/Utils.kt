@@ -30,6 +30,7 @@ import com.meta.theelectricfactory.focus.data.boardHeightArray
 import com.meta.theelectricfactory.focus.data.boardSizeArray
 import com.meta.theelectricfactory.focus.data.shape2DSizeArray
 import com.meta.theelectricfactory.focus.data.shape3DSizeArray
+import com.meta.theelectricfactory.focus.managers.AudioManager
 import com.meta.theelectricfactory.focus.viewmodels.FocusViewModel
 
 var temporalID: Int = 0
@@ -283,5 +284,5 @@ fun deleteObject(
         }
     }
     entity.destroy()
-    if (!cleaningProject) immA?.scene?.playSound(immA.deleteSound, position, 1f)
+    if (!cleaningProject) AudioManager.instance.playDeleteSound(position)
 }
