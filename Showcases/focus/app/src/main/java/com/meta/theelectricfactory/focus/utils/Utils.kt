@@ -216,20 +216,6 @@ fun placeInFront(entity: Entity?, offset: Vector3 = Vector3(0f), bigPanel: Boole
     entity.setComponent(Transform(Pose(newPos, newRot)))
 }
 
-// Hack to check if the user is still writing in a text field or search bar, as the elements doesn't have a property to detect it
-fun checkIfStillWriting( typingInterval: Long, lastTextChangeTime: Long, handler: Handler, lastRunnable: Array<Runnable?>, onComplete: () -> (Unit)) {
-
-    lastRunnable[0]?.let { handler.removeCallbacks(it) }
-
-    val runnable = Runnable {
-        if (System.currentTimeMillis() - lastTextChangeTime >= typingInterval) {
-            onComplete()
-        }
-    }
-    lastRunnable[0] = runnable
-    handler.postDelayed(runnable, typingInterval)
-}
-
 // When an object is selected, the delete button is shown in the specified position
 fun selectElement(ent: Entity) {
     ImmersiveActivity.getInstance()?.currentObjectSelected = ent

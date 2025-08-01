@@ -3,17 +3,13 @@
 package com.meta.theelectricfactory.focus.panels
 
 import android.content.res.Configuration.UI_MODE_TYPE_VR_HEADSET
-import android.os.Handler
-import android.os.Looper
 import android.util.Patterns
-import android.util.Log
 import android.webkit.WebResourceRequest
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,14 +24,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.meta.spatial.uiset.input.SpatialSearchBar
 import com.meta.spatial.uiset.theme.SpatialTheme
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.sp
 import com.meta.spatial.core.Entity
 import com.meta.spatial.toolkit.Grabbable
 import com.meta.spatial.toolkit.GrabbableType
@@ -46,8 +49,8 @@ import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
 import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.ui.focusFont
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
-import com.meta.theelectricfactory.focus.utils.checkIfStillWriting
 
 @Composable
 fun WebViewPanel(
@@ -59,10 +62,6 @@ fun WebViewPanel(
     var immA = ImmersiveActivity.getInstance()
     var urlInput = remember { mutableStateOf(url) }
     val webViewRef = remember { mutableStateOf<WebView?>(null) }
-
-    var lastTextChangeTime = remember { 0L }
-    val handler = remember { Handler(Looper.getMainLooper()) }
-    val lastRunnable = remember { arrayOf<Runnable?>(null) }
 
     return FocusTheme {
 
@@ -114,25 +113,37 @@ fun WebViewPanel(
 
                     Box(modifier = Modifier
                         .fillMaxWidth(0.945f)
-                        .clip(SpatialTheme.shapes.large)
-                        .background(Color.White)
                     ) {
-                        SpatialSearchBar(
-                            enableAudio = false,
-                            // Update address bar when web view created
-                            query = urlInput.value,
-                            onQueryChange = {
+                        BasicTextField(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.White, shape = SpatialTheme.shapes.large),
+                            value = urlInput.value,
+                            onValueChange = {
                                 urlInput.value = it
-                                lastTextChangeTime = System.currentTimeMillis()
-                                checkIfStillWriting(3 * 1000, lastTextChangeTime, handler, lastRunnable,  {
+                            },
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                fontSize = 15.sp,
+                                fontFamily = focusFont
+                            ),
+                            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                            keyboardActions = KeyboardActions(
+                                onDone = {
                                     onNewURL(urlInput.value, uuid, webViewRef)
-                                })
-                            },
-                            onQuerySubmit = {
-                                // TODO this is not working, we are hacking this with the checkIfStillWriting function
-                                Log.i("Focus", "Focus> onQuerySubmit")
-                                onNewURL(urlInput.value, uuid, webViewRef)
-                            },
+                                }
+                            ),
+
+                            decorationBox = { innerTextField ->
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(horizontal = 20.dp, vertical = 0.dp),
+                                    contentAlignment = Alignment.CenterStart
+                                ) {
+                                    innerTextField()
+                                }
+                            }
                         )
                     }
 

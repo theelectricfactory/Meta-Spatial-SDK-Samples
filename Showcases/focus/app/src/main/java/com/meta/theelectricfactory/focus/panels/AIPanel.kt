@@ -17,9 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,8 +26,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
@@ -46,15 +48,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.meta.spatial.uiset.button.PrimaryButton
-import com.meta.spatial.uiset.input.SpatialTextField
 import com.meta.spatial.uiset.theme.SpatialTheme
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
@@ -87,6 +90,8 @@ fun AIPanel() {
     var sendButtonLoading = remember { mutableStateOf(false) }
     var sendButtonIcon = remember { mutableIntStateOf(R.drawable.send) }
     val currentProjectUuid by FocusViewModel.instance.currentProjectUuid.collectAsState()
+
+    stickyAvailable.value = false
 
     // Message list is cleared when the project changes
     LaunchedEffect(currentProjectUuid) {
@@ -199,28 +204,57 @@ fun AIPanel() {
                         Row(
                             modifier = Modifier
                                 .align(Alignment.TopCenter)
-                                .padding(20.dp),
+                                .padding(10.dp, 40.dp),
                             verticalAlignment = Alignment.Bottom,
                             horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
                         ) {
                             SpatialTheme(
                                 colorScheme = focusColorScheme(FocusColorSchemes.Gray)
                             ) {
-                                SpatialTextField(
-                                    modifier = Modifier
-                                        .width(380.dp)
-                                        .height(80.dp),
-                                    label = "",
-                                    placeholder = "Write a message",
+
+                                TextField(
                                     value = messageInput.value,
                                     onValueChange = { messageInput.value = it },
                                     singleLine = true,
+                                    modifier = Modifier
+                                        .width(380.dp)
+                                        .height(54.dp)
+                                        .background(FocusColors.lightGray, shape = focusShapes(FocusShapes.Squared).large),
+                                    textStyle = TextStyle(
+                                        fontFamily = focusFont,
+                                        color = Color.Black
+                                    ),
+                                    placeholder = {
+                                        Text(
+                                            text = "Write a message",
+                                            fontFamily = focusFont,
+                                            color = FocusColors.gray,
+                                        )
+                                        LocalFocusManager.current.clearFocus()
+                                    },
+                                    colors = TextFieldDefaults.colors(
+                                        focusedContainerColor = Color.Transparent,
+                                        unfocusedContainerColor = Color.Transparent,
+                                        focusedIndicatorColor = Color.Transparent,
+                                        unfocusedIndicatorColor = Color.Transparent
+                                    ),
+                                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                                    keyboardActions = KeyboardActions(
+                                        onDone = {
+                                            onSendMessage(
+                                                messageInput,
+                                                messagesList,
+                                                sendButtonLoading,
+                                                sendButtonIcon,
+                                                stickyAvailable
+                                            )
+                                        }
+                                    ),
                                 )
                             }
 
                             Box(modifier = Modifier
-                                .height(50.dp)
-                                //.aspectRatio(1f)
+                                .height(48.dp)
                             ) {
                                 SpatialTheme(
                                     shapes = focusShapes(FocusShapes.Squared)
@@ -237,33 +271,13 @@ fun AIPanel() {
                                             )
                                         },
                                         onClick = {
-                                            if (messageInput.value != "") {
-                                                messagesList.add(
-                                                    0,
-                                                    Message(messageInput.value, true)
-                                                )
-                                                immA?.askToAI(messageInput.value, {
-                                                    messagesList.add(
-                                                        0,
-                                                        Message(
-                                                            immA.lastAIResponse,
-                                                            false
-                                                        )
-                                                    )
-                                                    stickyAvailable.value = true
-                                                    activeLoadingState(
-                                                        false,
-                                                        sendButtonLoading,
-                                                        sendButtonIcon
-                                                    )
-                                                })
-                                                messageInput.value = ""
-                                                activeLoadingState(
-                                                    true,
-                                                    sendButtonLoading,
-                                                    sendButtonIcon
-                                                )
-                                            }
+                                            onSendMessage(
+                                                messageInput,
+                                                messagesList,
+                                                sendButtonLoading,
+                                                sendButtonIcon,
+                                                stickyAvailable
+                                            )
                                         },
                                         isEnabled = !sendButtonLoading.value && messageInput.value.isNotEmpty(),
                                     )
@@ -281,6 +295,42 @@ fun activeLoadingState(state: Boolean, sendButtonLoading: MutableState<Boolean>,
     ImmersiveActivity.getInstance()?.waitingForAI = state
     sendButtonLoading.value = state
     sendButtonIcon.intValue = if (state) R.drawable.loading else R.drawable.send
+}
+
+fun onSendMessage(
+    messageInput: MutableState<String>,
+    messagesList: MutableList<Message>,
+    sendButtonLoading: MutableState<Boolean>,
+    sendButtonIcon: MutableIntState,
+    stickyAvailable: MutableState<Boolean>
+) {
+    if (messageInput.value.isNotEmpty()) {
+        messagesList.add(
+            0,
+            Message(messageInput.value, true)
+        )
+        ImmersiveActivity.getInstance()?.askToAI(messageInput.value, {
+            messagesList.add(
+                0,
+                Message(
+                    ImmersiveActivity.getInstance()!!.lastAIResponse,
+                    false
+                )
+            )
+            stickyAvailable.value = true
+            activeLoadingState(
+                false,
+                sendButtonLoading,
+                sendButtonIcon
+            )
+        })
+        messageInput.value = ""
+        activeLoadingState(
+            true,
+            sendButtonLoading,
+            sendButtonIcon
+        )
+    }
 }
 
 @Composable

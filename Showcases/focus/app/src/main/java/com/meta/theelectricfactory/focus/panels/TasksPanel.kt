@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -52,7 +51,6 @@ import com.meta.spatial.core.Pose
 import com.meta.spatial.core.Quaternion
 import com.meta.spatial.core.Vector3
 import com.meta.spatial.uiset.button.BorderlessCircleButton
-import com.meta.spatial.uiset.button.BorderlessIconButton
 import com.meta.spatial.uiset.button.SecondaryCircleButton
 import com.meta.spatial.uiset.tooltip.SpatialTooltipContent
 import com.meta.theelectricfactory.focus.db.DatabaseManager
@@ -173,21 +171,6 @@ fun TasksPanel() {
                     }
 
                     Spacer(modifier = Modifier.size(10.dp))
-
-                    // TODO
-                    //                SpatialTextField(
-//                    label = "",
-//                    placeholder = "Add text",
-//                    value = "",
-//                    onValueChange = { },
-//                    autoValidate = false,
-//                )
-
-//                BasicTextField(
-//                    value = "",
-//                    onValueChange = { },
-//                    modifier = Modifier.fillMaxWidth()
-//                )
 
                     TextField(
                         modifier = Modifier

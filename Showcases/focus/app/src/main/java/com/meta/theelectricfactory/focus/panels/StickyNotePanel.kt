@@ -75,16 +75,6 @@ fun StickyNotePanel(
                             modifier = Modifier
                                 .align(Alignment.TopCenter),
                         ) {
-                            //TODO
-                            
-//                            SpatialTextField(
-//                                modifier = Modifier
-//                                    .fillMaxWidth(),
-//                                label = "",
-//                                placeholder = "Type something",
-//                                value = "",
-//                                onValueChange = { }
-//                            )
                             TextField(
                                 modifier = Modifier
                                     .fillMaxWidth(),
