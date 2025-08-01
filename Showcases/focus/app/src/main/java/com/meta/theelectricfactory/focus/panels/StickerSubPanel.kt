@@ -25,15 +25,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.theelectricfactory.focus.ui.FocusTheme
-import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 
 @Composable
 fun StickerSubPanel() {
-
-    var immA = ImmersiveActivity.getInstance()
-
     return FocusTheme {
         Box(
             Modifier
@@ -53,12 +50,12 @@ fun StickerSubPanel() {
                     text = "Stickers"
                 )
 
-                ToolbarSubpanelButton( R.drawable.sticker1, onClick = {immA?.CreateSticker(0)})
-                ToolbarSubpanelButton( R.drawable.sticker2, onClick = {immA?.CreateSticker(1)})
-                ToolbarSubpanelButton( R.drawable.sticker3, onClick = {immA?.CreateSticker(2)})
-                ToolbarSubpanelButton( R.drawable.sticker4, onClick = {immA?.CreateSticker(3)})
-                ToolbarSubpanelButton( R.drawable.sticker5, onClick = {immA?.CreateSticker(4)})
-                ToolbarSubpanelButton( R.drawable.sticker6, onClick = {immA?.CreateSticker(5)})
+                ToolbarSubpanelButton( R.drawable.sticker1, onClick = { ToolManager.instance.createSticker(0)})
+                ToolbarSubpanelButton( R.drawable.sticker2, onClick = { ToolManager.instance.createSticker(1)})
+                ToolbarSubpanelButton( R.drawable.sticker3, onClick = { ToolManager.instance.createSticker(2)})
+                ToolbarSubpanelButton( R.drawable.sticker4, onClick = { ToolManager.instance.createSticker(3)})
+                ToolbarSubpanelButton( R.drawable.sticker5, onClick = { ToolManager.instance.createSticker(4)})
+                ToolbarSubpanelButton( R.drawable.sticker6, onClick = { ToolManager.instance.createSticker(5)})
             }
         }
     }

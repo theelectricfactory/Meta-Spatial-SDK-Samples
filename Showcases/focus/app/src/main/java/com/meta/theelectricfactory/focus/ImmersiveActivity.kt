@@ -31,85 +31,45 @@ import com.meta.spatial.toolkit.Scale
 import com.meta.spatial.toolkit.Transform
 import com.meta.spatial.toolkit.TransformParent
 import com.meta.spatial.toolkit.Visible
-import com.meta.spatial.toolkit.createPanelEntity
 import com.meta.spatial.vr.LocomotionSystem
 import com.meta.spatial.vr.VRFeature
 import java.lang.ref.WeakReference
-import kotlinx.coroutines.*
 import com.meta.spatial.compose.ComposeFeature
 import com.meta.theelectricfactory.focus.data.Project
 import com.meta.theelectricfactory.focus.data.StickyColor
-import com.meta.theelectricfactory.focus.data.arrows
-import com.meta.theelectricfactory.focus.data.boards
 import com.meta.theelectricfactory.focus.data.environments
-import com.meta.theelectricfactory.focus.data.labels
-import com.meta.theelectricfactory.focus.data.shapes
 import com.meta.theelectricfactory.focus.data.skyboxes
-import com.meta.theelectricfactory.focus.data.stickers
-import com.meta.theelectricfactory.focus.db.DatabaseManager
-import com.meta.theelectricfactory.focus.fragments.FirstFragment
-import com.meta.theelectricfactory.focus.fragments.SecondFragment
-import com.meta.theelectricfactory.focus.panels.PanelRegistrationIds
-import com.meta.theelectricfactory.focus.panels.ToolbarPanel
-import com.meta.theelectricfactory.focus.panels.AIPanel
-import com.meta.theelectricfactory.focus.panels.ArrowSubPanel
-import com.meta.theelectricfactory.focus.panels.BoardSubPanel
-import com.meta.theelectricfactory.focus.panels.LabelSubPanel
-import com.meta.theelectricfactory.focus.panels.ShapeSubPanel
-import com.meta.theelectricfactory.focus.panels.StickerSubPanel
-import com.meta.theelectricfactory.focus.panels.StickySubPanel
-import com.meta.theelectricfactory.focus.panels.TasksPanel
-import com.meta.theelectricfactory.focus.panels.TimerSubPanel
-import com.meta.theelectricfactory.focus.panels.panelRegistration
+import com.meta.theelectricfactory.focus.managers.DatabaseManager
+import com.meta.theelectricfactory.focus.managers.AIManager
+import com.meta.theelectricfactory.focus.managers.PanelManager
+import com.meta.theelectricfactory.focus.managers.TasksManager
+import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.systems.BoardParentingSystem
 import com.meta.theelectricfactory.focus.systems.DatabaseUpdateSystem
 import com.meta.theelectricfactory.focus.systems.GeneralSystem
 import com.meta.theelectricfactory.focus.systems.UpdateTimeSystem
 import com.meta.theelectricfactory.focus.tools.StickyNote
-import com.meta.theelectricfactory.focus.tools.Timer
 import com.meta.theelectricfactory.focus.tools.Tool
 import com.meta.theelectricfactory.focus.tools.WebView
-import com.meta.theelectricfactory.focus.utils.AIUtils
 import com.meta.theelectricfactory.focus.viewmodels.FocusViewModel
 import com.meta.theelectricfactory.focus.utils.addOnSelectListener
 import com.meta.theelectricfactory.focus.utils.deleteObject
-import com.meta.theelectricfactory.focus.utils.getAssetSize
 import com.meta.theelectricfactory.focus.utils.getChildren
-import com.meta.theelectricfactory.focus.utils.getDeleteButtonHeight
 import com.meta.theelectricfactory.focus.utils.getNewUUID
 import com.meta.theelectricfactory.focus.utils.placeInFront
 
 class ImmersiveActivity : AppSystemActivity() {
 
-    // Enable or disable AI in project
-    val AIenabled: Boolean = true
-
     lateinit var DB: DatabaseManager
     var appStarted: Boolean = false
 
-    // PROJECT DATA
+    // PROJECT ELEMENTS
     lateinit var logo: Entity
     lateinit var environment: Entity
     lateinit var skybox: Entity
     lateinit var clock: Entity
     lateinit var speaker: Entity
     lateinit var speakerState: Entity
-
-    // PANELS
-    lateinit var homePanel: Entity
-    lateinit var toolbarPanel: Entity
-    lateinit var tasksPanel: Entity
-    lateinit var aiExchangePanel: Entity
-
-    lateinit var stickySubPanel: Entity
-    lateinit var labelSubPanel: Entity
-    lateinit var arrowSubPanel: Entity
-    lateinit var boardSubPanel: Entity
-    lateinit var shapeSubPanel: Entity
-    lateinit var stickerSubPanel: Entity
-    lateinit var timerSubPanel: Entity
-    var subpanels: MutableList<Entity> = mutableListOf()
-
     lateinit var deleteButton: Entity
 
     // Sounds
@@ -128,8 +88,6 @@ class ImmersiveActivity : AppSystemActivity() {
     var currentObjectSelected: Entity? = null
     var passthroughEnabled: Boolean = false
     var speakerIsOn = false
-    var lastAIResponse = ""
-    var waitingForAI = false
 
     override fun registerFeatures(): List<SpatialFeature> {
         val features =
@@ -142,6 +100,8 @@ class ImmersiveActivity : AppSystemActivity() {
         Log.i("Focus", "Focus> onCreate")
 
         instance = WeakReference(this)
+        PanelManager.instance.immA = this
+        TasksManager.instance.immA = this
 
         // Register custom systems and components
         componentManager.registerComponent<UniqueAssetComponent>(UniqueAssetComponent.Companion)
@@ -171,7 +131,7 @@ class ImmersiveActivity : AppSystemActivity() {
         DB = DatabaseManager(this)
 
         // Main panels created
-        createPanels()
+        PanelManager.instance.createPanels()
         // Rest of the elements in scene are created
         createSceneElements()
         // Initial state of objects in scene
@@ -179,19 +139,7 @@ class ImmersiveActivity : AppSystemActivity() {
     }
 
     override fun registerPanels(): List<PanelRegistration> {
-        return listOf(
-            panelRegistration(PanelRegistrationIds.HomePanel, 0.58f, 0.41f, true) {},
-            panelRegistration(PanelRegistrationIds.Toolbar, 0.65f, 0.065f) { ToolbarPanel() },
-            panelRegistration(PanelRegistrationIds.TasksPanel, 0.275f, 0.5f) { TasksPanel() },
-            panelRegistration(PanelRegistrationIds.AIPanel, 0.3f, 0.5f) { AIPanel() },
-            panelRegistration(PanelRegistrationIds.StickySubPanel, 0.26f, 0.042f) { StickySubPanel() },
-            panelRegistration(PanelRegistrationIds.LabelSubPanel, 0.46f, 0.042f) { LabelSubPanel() },
-            panelRegistration(PanelRegistrationIds.ArrowSubPanel, 0.24f, 0.042f) { ArrowSubPanel() },
-            panelRegistration(PanelRegistrationIds.BoardSubPanel, 0.18f, 0.042f) { BoardSubPanel() },
-            panelRegistration(PanelRegistrationIds.ShapesSubPanel, 0.25f, 0.042f) { ShapeSubPanel() },
-            panelRegistration(PanelRegistrationIds.StickerSubPanel, 0.25f, 0.042f) { StickerSubPanel() },
-            panelRegistration(PanelRegistrationIds.TimerSubPanel, 0.35f, 0.042f) { TimerSubPanel() },
-        )
+         return PanelManager.instance.registerFocusPanels()
     }
 
     override fun onPause() {
@@ -218,18 +166,17 @@ class ImmersiveActivity : AppSystemActivity() {
 
         deleteButton.setComponent(Visible(false))
 
-        if (!homePanel.getComponent<Visible>().isVisible) placeInFront(homePanel)
-        homePanel.setComponent(Visible(appStarted))
-        toolbarPanel.setComponent(Visible(false))
-        tasksPanel.setComponent(Visible(false))
-        aiExchangePanel.setComponent(Visible(false))
-
-        closeSubPanels()
+        if (!PanelManager.instance.homePanel.getComponent<Visible>().isVisible) placeInFront(PanelManager.instance.homePanel)
+        PanelManager.instance.homePanel.setComponent(Visible(appStarted))
+        PanelManager.instance.toolbarPanel.setComponent(Visible(false))
+        PanelManager.instance.tasksPanel.setComponent(Visible(false))
+        PanelManager.instance.aiExchangePanel.setComponent(Visible(false))
+        PanelManager.instance.closeSubPanels()
 
         showClock(false)
         showSpeaker(false)
 
-        cleanElements()
+        ToolManager.instance.cleanElements()
     }
 
     fun newProject() {
@@ -242,20 +189,20 @@ class ImmersiveActivity : AppSystemActivity() {
         currentObjectSelected = null
         passthroughEnabled = false
         speakerIsOn = false
-        lastAIResponse = ""
-        waitingForAI = false
+        AIManager.instance.lastAIResponse = ""
+        AIManager.instance.waitingForAI = false
         setInitialState()
     }
 
     // Load project from scroll view in First Fragment
     @SuppressLint("Range")
     fun loadProject(id: Int) {
-        homePanel.setComponent(Visible(false))
+        PanelManager.instance.homePanel.setComponent(Visible(false))
 
         if (currentProject?.uuid == id) return
 
         // Clean elements from previous projects
-        cleanElements()
+        ToolManager.instance.cleanElements()
 
         // Load project settings
         val cursor = DB.getProject(id)
@@ -316,15 +263,15 @@ class ImmersiveActivity : AppSystemActivity() {
 
                 when (type) {
                     AssetType.TASKS_PANEL -> {
-                        tasksPanel.setComponent(UniqueAssetComponent(uuid, AssetType.TASKS_PANEL))
-                        tasksPanel.setComponent(Visible(if (state == 1) true else false))
-                        tasksPanel.setComponent(
+                        PanelManager.instance.tasksPanel.setComponent(UniqueAssetComponent(uuid, AssetType.TASKS_PANEL))
+                        PanelManager.instance.tasksPanel.setComponent(Visible(if (state == 1) true else false))
+                        PanelManager.instance.tasksPanel.setComponent(
                             Transform(Pose(Vector3(posX, posY, posZ), Quaternion(rotW, rotX, rotY, rotZ))))
                     }
                     AssetType.AI_PANEL -> {
-                        aiExchangePanel.setComponent(UniqueAssetComponent(uuid, AssetType.AI_PANEL))
-                        aiExchangePanel.setComponent(Visible(if (state == 1) true else false))
-                        aiExchangePanel.setComponent(
+                        PanelManager.instance.aiExchangePanel.setComponent(UniqueAssetComponent(uuid, AssetType.AI_PANEL))
+                        PanelManager.instance.aiExchangePanel.setComponent(Visible(if (state == 1) true else false))
+                        PanelManager.instance.aiExchangePanel.setComponent(
                             Transform(Pose(Vector3(posX, posY, posZ), Quaternion(rotW, rotX, rotY, rotZ))))
                     }
                     AssetType.CLOCK -> {
@@ -348,8 +295,8 @@ class ImmersiveActivity : AppSystemActivity() {
             }
         }
 
-        placeInFront(toolbarPanel)
-        toolbarPanel.setComponent(Visible(true))
+        placeInFront(PanelManager.instance.toolbarPanel)
+        PanelManager.instance.toolbarPanel.setComponent(Visible(true))
 
         showClock(true)
         showSpeaker(true)
@@ -444,41 +391,7 @@ class ImmersiveActivity : AppSystemActivity() {
         }
         stickiesCursor.close()
 
-        linkToolsWithParentBoards()
-    }
-
-    // Link objects sticked to boards with their parent entities
-    fun linkToolsWithParentBoards(spatialTask: Entity? = null) {
-        var boards: MutableList<Entity> = mutableListOf()
-
-        val toolAssets = Query.where { has(AttachableComponent.id) }
-        for (entity in toolAssets.eval()) {
-
-            val type = entity.getComponent<AttachableComponent>().type
-            if (type == 1) {
-                boards.add(entity)
-            }
-        }
-
-        if (spatialTask != null) {
-            val parentUuid = spatialTask.getComponent<AttachableComponent>().parentUuid
-            for (board in boards) {
-                val boardUuid = board.getComponent<ToolComponent>().uuid
-                if (boardUuid == parentUuid) {
-                    spatialTask.setComponent(TransformParent(board))
-                }
-            }
-        } else {
-            for (entity in toolAssets.eval()) {
-                val parentUuid = entity.getComponent<AttachableComponent>().parentUuid
-                if (parentUuid != -1) {
-                    for (board in boards) {
-                        val boardUuid = board.getComponent<ToolComponent>().uuid
-                        if (boardUuid == parentUuid) entity.setComponent(TransformParent(board))
-                    }
-                }
-            }
-        }
+        ToolManager.instance.linkToolsWithParentBoards()
     }
 
     // Save project settings in second fragment
@@ -494,10 +407,10 @@ class ImmersiveActivity : AppSystemActivity() {
             DB.createProject(project)
             FocusViewModel.instance.updateCurrentProjectUuid(project.uuid)
 
-            placeInFront(toolbarPanel)
-            toolbarPanel.setComponent(Visible(true))
-            tasksPanel.setComponent(Visible(true))
-            if (AIenabled) aiExchangePanel.setComponent(Visible(true))
+            placeInFront(PanelManager.instance.toolbarPanel)
+            PanelManager.instance.toolbarPanel.setComponent(Visible(true))
+            PanelManager.instance.tasksPanel.setComponent(Visible(true))
+            if (AIManager.instance.AIenabled) PanelManager.instance.aiExchangePanel.setComponent(Visible(true))
             showClock(true)
             showSpeaker(true)
 
@@ -507,15 +420,15 @@ class ImmersiveActivity : AppSystemActivity() {
             val clockUUID = getNewUUID()
             val speakerUUID = getNewUUID()
 
-            tasksPanel.setComponent(UniqueAssetComponent(tasksPanelUUID, AssetType.TASKS_PANEL))
-            aiExchangePanel.setComponent(UniqueAssetComponent(aiPanelUUID, AssetType.AI_PANEL))
+            PanelManager.instance.tasksPanel.setComponent(UniqueAssetComponent(tasksPanelUUID, AssetType.TASKS_PANEL))
+            PanelManager.instance.aiExchangePanel.setComponent(UniqueAssetComponent(aiPanelUUID, AssetType.AI_PANEL))
             clock.setComponent(UniqueAssetComponent(clockUUID, AssetType.CLOCK))
             speaker.setComponent(UniqueAssetComponent(speakerUUID, AssetType.SPEAKER))
 
             // Initial configuration of panels for a new project
-            placeInFront(toolbarPanel)
-            placeInFront(tasksPanel, Vector3(-0.45f, -0.04f, 0.8f))
-            placeInFront(aiExchangePanel, Vector3(0.45f, -0.05f, 0.8f))
+            placeInFront(PanelManager.instance.toolbarPanel)
+            placeInFront(PanelManager.instance.tasksPanel, Vector3(-0.45f, -0.04f, 0.8f))
+            placeInFront(PanelManager.instance.aiExchangePanel, Vector3(0.45f, -0.05f, 0.8f))
             placeInFront(clock, Vector3(0f, 0.23f, 0.9f))
             placeInFront(speaker, Vector3(-0.65f, -0.3f, 0.65f))
 
@@ -525,7 +438,7 @@ class ImmersiveActivity : AppSystemActivity() {
                 project.uuid,
                 AssetType.TASKS_PANEL,
                 true,
-                tasksPanel.getComponent<Transform>().transform
+                PanelManager.instance.tasksPanel.getComponent<Transform>().transform
             )
 
             DB.createUniqueAsset(
@@ -533,7 +446,7 @@ class ImmersiveActivity : AppSystemActivity() {
                 project.uuid,
                 AssetType.AI_PANEL,
                 true,
-                aiExchangePanel.getComponent<Transform>().transform
+                PanelManager.instance.aiExchangePanel.getComponent<Transform>().transform
             )
 
             DB.createUniqueAsset(
@@ -554,9 +467,7 @@ class ImmersiveActivity : AppSystemActivity() {
 
             // Initial Web View tool created as an example
             WebView()
-            // Clean tasks from previous projects, in case there are
-            //cleanAndLoadTasks()
-            homePanel.setComponent(Visible(false))
+            PanelManager.instance.homePanel.setComponent(Visible(false))
             playAmbientSound()
 
         // if it is not a new project, we only update project settings in database (name, environment)
@@ -567,14 +478,6 @@ class ImmersiveActivity : AppSystemActivity() {
             currentProject?.environment = currentEnvironment
 
             DB.updateProject(currentProject)
-        }
-    }
-
-    private fun cleanElements() {
-        // Clean previous elements in project, if there is any
-        val toolAssets = Query.where { has(ToolComponent.id) }
-        for (entity in toolAssets.eval()) {
-            deleteObject(entity, false, true)
         }
     }
 
@@ -732,22 +635,6 @@ class ImmersiveActivity : AppSystemActivity() {
             })
     }
 
-    // All panels in scene are created and referenced in variables to control them
-    private fun createPanels() {
-        createHomePanel()
-        createToolbarPanel()
-        createTasksPanel()
-        createAIExchangePanel()
-
-        createStickySubPanel()
-        createLabelSubPanel()
-        createArrowSubPanel()
-        createBoardSubPanel()
-        createShapeSubPanel()
-        createStickerSubPanel()
-        createTimerSubPanel()
-    }
-
     // Creation of scene elements
     fun createSceneElements() {
 
@@ -788,8 +675,8 @@ class ImmersiveActivity : AppSystemActivity() {
     fun initApp() {
         appStarted = true
         logo.destroy()
-        placeInFront(homePanel)
-        homePanel.setComponent(Visible(true))
+        placeInFront(PanelManager.instance.homePanel)
+        PanelManager.instance.homePanel.setComponent(Visible(true))
     }
 
     private fun setPassthrough(state: Boolean) {
@@ -865,339 +752,11 @@ class ImmersiveActivity : AppSystemActivity() {
         skybox.setComponent(Visible(false))
     }
 
-    // TASKS Management
-    // TODO: Task Manager???
-
-    fun getSpatialTask(uuid: Int): Entity? {
-        val tools = Query.where { has(ToolComponent.id) }
-        for (entity in tools.eval()) {
-            val entityUuid = entity.getComponent<ToolComponent>().uuid
-            if (uuid == entityUuid) {
-                return entity
-            }
-        }
-        return null
-    }
-
-    fun deleteTask(uuid: Int) {
-        DB.deleteTask(uuid)
-        FocusViewModel.instance.refreshTasksPanel()
-
-        // Delete correspondent spatial task if exists
-        var ent = getSpatialTask(uuid)
-        if (ent != null) {
-            // if current object selected is spatial task, we detach delete button first.
-            if (currentObjectSelected != null && currentObjectSelected!!.equals(ent)) {
-                currentObjectSelected = null
-                deleteButton.setComponent(TransformParent())
-                deleteButton.setComponent(Visible(false))
-            }
-
-            ent.destroy()
-            scene.playSound(deleteSound, tasksPanel.getComponent<Transform>().transform.t, 1f)
-        }
-    }
-
     fun SwitchAudio() {
         if (speakerIsOn) {
             stopAmbientSound()
         } else {
             playAmbientSound()
-        }
-    }
-
-    //////////////////////////
-    // PANEL ENTITIES CREATION
-    /////////////////////////
-    // TODO: Move to Panel Manager???
-
-    private fun createHomePanel() {
-        homePanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.HomePanel,
-                Transform(Pose(Vector3(0f))),
-                Grabbable(true, GrabbableType.FACE),
-                Visible(false)
-            )
-    }
-
-    fun createTasksPanel() {
-        tasksPanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.TasksPanel,
-                Transform(Pose(Vector3(0f))),
-                Grabbable(true, GrabbableType.FACE),
-                Visible(false),
-                // Empty UUID since the asset is not linked with any project for now
-                UniqueAssetComponent(type = AssetType.TASKS_PANEL))
-    }
-
-    // We create an AIExchangePanel chat to communicate with an AI assistant
-    fun createAIExchangePanel() {
-        aiExchangePanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.AIPanel,
-                Transform(Pose(Vector3(0f))),
-                Grabbable(true, GrabbableType.FACE),
-                Visible(false),
-                // Empty UUID since the asset is not linked with any project for now
-                UniqueAssetComponent(type = AssetType.AI_PANEL))
-    }
-
-    fun createToolbarPanel() {
-        toolbarPanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.Toolbar,
-                Transform(Pose(Vector3(0f))),
-                Grabbable(true, GrabbableType.FACE),
-                Visible(false))
-    }
-
-    fun createStickySubPanel() {
-        stickySubPanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.StickySubPanel,
-                Transform(Pose(Vector3(0f, 0.06f, -0.05f))),
-                Visible(false),
-                TransformParent(toolbarPanel))
-
-        subpanels.add(stickySubPanel)
-    }
-
-    fun createLabelSubPanel() {
-        labelSubPanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.LabelSubPanel,
-                Transform(Pose(Vector3(0f, 0.06f, -0.05f))),
-                Visible(false),
-                TransformParent(toolbarPanel))
-
-        subpanels.add(labelSubPanel)
-    }
-
-    fun createArrowSubPanel() {
-        arrowSubPanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.ArrowSubPanel,
-                Transform(Pose(Vector3(0f, 0.06f, -0.05f))),
-                Visible(false),
-                TransformParent(toolbarPanel))
-
-        subpanels.add(arrowSubPanel)
-    }
-
-    fun createBoardSubPanel() {
-        boardSubPanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.BoardSubPanel,
-                Transform(Pose(Vector3(0f, 0.06f, -0.05f))),
-                Visible(false),
-                TransformParent(toolbarPanel))
-
-        subpanels.add(boardSubPanel)
-    }
-
-    fun createShapeSubPanel() {
-        shapeSubPanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.ShapesSubPanel,
-                Transform(Pose(Vector3(0f, 0.06f, -0.05f))),
-                Visible(false),
-                TransformParent(toolbarPanel))
-
-        subpanels.add(shapeSubPanel)
-    }
-
-    fun createStickerSubPanel() {
-        stickerSubPanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.StickerSubPanel,
-                Transform(Pose(Vector3(0f, 0.06f, -0.05f))),
-                Visible(false),
-                TransformParent(toolbarPanel))
-
-        subpanels.add(stickerSubPanel)
-    }
-
-    fun createTimerSubPanel() {
-        timerSubPanel =
-            Entity.createPanelEntity(
-                PanelRegistrationIds.TimerSubPanel,
-                Transform(Pose(Vector3(0f, 0.06f, -0.05f))),
-                Visible(false),
-                TransformParent(toolbarPanel))
-
-        subpanels.add(timerSubPanel)
-    }
-
-    fun openSubPanel(panel: Entity) {
-        val isVisible = panel.getComponent<Visible>().isVisible
-        closeSubPanels(true)
-        if (!isVisible) {
-            panel.setComponent(Visible(true))
-        }
-    }
-
-    fun closeSubPanels(keepSelectedTool: Boolean = false) {
-        for (i in 0..subpanels.count() - 1) {
-            subpanels[i].setComponent(Visible(false))
-        }
-        if (!keepSelectedTool) FocusViewModel.instance.setSelectedTool(-1)
-    }
-
-    // PANELS HANDLING FUNCTIONS
-
-    fun OpenHomePanel() {
-        // if second fragment is initialized and active, we change to First Fragment
-        try {
-            if (SecondFragment.instance.get()?.isCurrentlyVisible() == true) {
-                SecondFragment.instance.get()?.moveToFirstFragment()
-            } else {
-                FirstFragment.instance.get()?.refreshProjects()
-            }
-        } catch (e: UninitializedPropertyAccessException) {}
-        placeInFront(homePanel)
-        homePanel.setComponent(Visible(true))
-        ambientSoundPlayer.stop()
-
-        newProject()
-    }
-
-    fun OpenSettingsPanel() {
-        // if first fragment is initialized and active, we change to Second Fragment
-        try {
-            if (FirstFragment.instance.get()?.isCurrentlyVisible() == true) {
-                FirstFragment.instance.get()?.moveToSecondFragment()
-            }
-        } catch (e: UninitializedPropertyAccessException) {}
-        placeInFront(homePanel)
-        homePanel.setComponent(Visible(true))
-    }
-
-    fun ShowTasksPanel(state: Boolean = true) {
-        if (state) placeInFront(tasksPanel, bigPanel = true)
-        tasksPanel.setComponent(Visible(state))
-        DB.updateUniqueAsset(tasksPanel.getComponent<UniqueAssetComponent>().uuid, state = state)
-    }
-
-    fun ShowAIPanel(state: Boolean = true) {
-        if (state) placeInFront(aiExchangePanel, bigPanel = true)
-        aiExchangePanel.setComponent(Visible(state))
-        DB.updateUniqueAsset(aiExchangePanel.getComponent<UniqueAssetComponent>().uuid, state = state)
-    }
-
-    fun OpenWebView() {
-        WebView()
-    }
-
-    /// TOOLS CREATION FUNCTIONS
-    // TODO: Move to Tool Manager???
-
-    fun CreateStickyNote(index: Int) {
-        StickyNote(
-            message = "",
-            color = StickyColor.entries[index])
-        closeSubPanels()
-    }
-
-    fun CreateLabelTool(index: Int) {
-        // Create Label tool
-        Tool(
-            type = AssetType.LABEL,
-            source = labels[index].toString(),
-            size = 0.065f,
-            deleteButtonHeight = 0.05f)
-        closeSubPanels()
-    }
-
-    fun CreateArrowTool(index: Int) {
-        // Create Arrow tool
-        Tool(
-            type = AssetType.ARROW,
-            source = arrows[index].toString(),
-            size = 0.1f,
-            deleteButtonHeight = getDeleteButtonHeight(AssetType.ARROW, index)
-        )
-        closeSubPanels()
-    }
-
-    fun CreateBoard(index: Int) {
-        // Create Board
-        Tool(
-            type = AssetType.BOARD,
-            source = boards[index].toString(),
-            size = getAssetSize(AssetType.BOARD, index),
-            deleteButtonHeight = getDeleteButtonHeight(AssetType.BOARD, index)
-        )
-        closeSubPanels()
-    }
-
-    fun CreateShape(index: Int) {
-        // Create Shape tool (2D or 3D)
-        val type = if (index % 2 == 0) AssetType.SHAPE_2D else AssetType.SHAPE_3D
-        val deleteHeight = if (index % 2 == 0) 0.08f else 0.12f
-        Tool(
-            type = type,
-            source = shapes[index].toString(),
-            size = getAssetSize(type, index),
-            deleteButtonHeight = deleteHeight)
-        closeSubPanels()
-    }
-
-    fun CreateSticker(index: Int) {
-        // Create Sticker tool
-        Tool(type = AssetType.STICKER, source = stickers[index].toString(), size = 0.04f)
-        closeSubPanels()
-    }
-
-    fun CreateTimer(index: Int) {
-        // Create Timer
-        Timer((index + 1) * 5)
-        closeSubPanels()
-    }
-
-    //////////////////////////
-    // AI Communication
-    /////////////////////////
-    // TODO: Move to AI Manager???
-
-    // This function sends the questions of the user to the AI. More info in AIUtils.kt
-    // and creates the corresponding messages in the chat panel
-    fun askToAI(question: String, onComplete: () -> (Unit)) {
-        var response = ""
-        GlobalScope.launch(Dispatchers.IO) {
-            val result = AIUtils.askQuestion(question)
-            withContext(Dispatchers.Main) {
-                if (result.success && result.data != null) {
-                    response = result.data.answer
-                } else if (result.errmsg != null) {
-                    response = "Error: " + result.errmsg
-                } else {
-                    response = "Error: Empty response"
-                }
-                lastAIResponse = response
-                onComplete()
-            }
-        }
-    }
-
-    // This function summarizes the las response of the AI
-    // in order to create a Sticky Note with that information
-    fun summarize(message: String) {
-        var response = ""
-        GlobalScope.launch(Dispatchers.IO) {
-            val result = AIUtils.summarizeText(message)
-            withContext(Dispatchers.Main) {
-                if (result.success && result.data != null) {
-                    response = result.data.summary
-                } else if (result.errmsg != null) {
-                    response = "Error: " + result.errmsg
-                } else {
-                    response = "Error: Empty response"
-                }
-                StickyNote(
-                    message = response, color = StickyColor.Purple)
-            }
         }
     }
 

@@ -53,11 +53,14 @@ import com.meta.spatial.core.Vector3
 import com.meta.spatial.uiset.button.BorderlessCircleButton
 import com.meta.spatial.uiset.button.SecondaryCircleButton
 import com.meta.spatial.uiset.tooltip.SpatialTooltipContent
-import com.meta.theelectricfactory.focus.db.DatabaseManager
+import com.meta.theelectricfactory.focus.managers.DatabaseManager
 import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
 import com.meta.theelectricfactory.focus.ImmersiveActivity
+import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.managers.Task
+import com.meta.theelectricfactory.focus.managers.TasksManager
 import com.meta.theelectricfactory.focus.tools.SpatialTask
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 import com.meta.theelectricfactory.focus.utils.getNewUUID
@@ -69,8 +72,6 @@ import com.meta.theelectricfactory.focus.ui.FocusShapes
 import com.meta.theelectricfactory.focus.ui.focusColorScheme
 import com.meta.theelectricfactory.focus.ui.focusShapes
 import com.meta.theelectricfactory.focus.viewmodels.FocusViewModel
-
-data class Task(val uuid: Int, var title: String, val body: String, var state: Int, var priority: Int, val detached: Int, val parentUuid: Int, val pose: Pose)
 
 @SuppressLint("Range")
 @Composable
@@ -134,7 +135,7 @@ fun TasksPanel() {
 
                 SecondaryCircleButton(
                     onClick = {
-                        immA?.ShowTasksPanel(false)
+                        PanelManager.instance.showTasksPanel(false)
                     },
                     icon = {
                         Icon(
@@ -416,7 +417,7 @@ fun TaskCard(
                             )
                         },
                         onClick = {
-                            immA!!.deleteTask(task.uuid)
+                            TasksManager.instance.deleteTask(task.uuid)
                         }
                     )
                 }
@@ -495,7 +496,7 @@ fun TaskCard(
     }
 
     if (task.detached == 1 && !isSpatial) {
-        if (immA?.getSpatialTask(task.uuid) == null) {
+        if (TasksManager.instance.getSpatialTask(task.uuid) == null) {
             SpatialTask(
                 task = task,
                 mainTaskLabelState = taskLabelState,

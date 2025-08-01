@@ -29,9 +29,12 @@ import com.meta.spatial.uiset.navigation.SpatialSideNavItem
 import com.meta.spatial.uiset.theme.LocalShapes
 import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.theelectricfactory.focus.ImmersiveActivity
+import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.managers.AIManager
+import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.ui.FocusShapes
 import com.meta.theelectricfactory.focus.ui.focusShapes
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
@@ -74,7 +77,7 @@ fun ToolbarPanel() {
                             false,
                             color = FocusColors.lightGray,
                             onClick = {
-                                immA?.OpenHomePanel()
+                                PanelManager.instance.openHomePanel()
                             }
                         )
 
@@ -94,7 +97,7 @@ fun ToolbarPanel() {
                             false,
                             color = FocusColors.lightGray,
                             onClick = {
-                                immA?.OpenSettingsPanel()
+                                PanelManager.instance.openSettingsPanel()
                             }
                         )
                     }
@@ -118,7 +121,7 @@ fun ToolbarPanel() {
                             false,
                             color = FocusColors.lightBlue,
                             onClick = {
-                                immA?.ShowTasksPanel(true)
+                                PanelManager.instance.showTasksPanel(true)
                             }
                         )
 
@@ -128,18 +131,18 @@ fun ToolbarPanel() {
                             false,
                             color = FocusColors.lightGreen,
                             onClick = {
-                                immA?.OpenWebView()
+                                ToolManager.instance.createWebView()
                             }
                         )
 
-                        if (immA != null && immA.AIenabled) {
+                        if (immA != null && AIManager.instance.AIenabled) {
                             ToolbarButton(
                                 R.drawable.ai,
                                 "Chat with AI",
                                 false,
                                 color = FocusColors.aiPurple,
                                 onClick = {
-                                    immA.ShowAIPanel(true)
+                                    PanelManager.instance.showAIPanel(true)
                                 }
                             )
                         }
@@ -156,7 +159,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 0) FocusViewModel.instance.setSelectedTool(0)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immA?.openSubPanel(immA.stickySubPanel)
+                                PanelManager.instance.openSubPanel(PanelManager.instance.stickySubPanel)
                             }
                         )
 
@@ -167,7 +170,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 1) FocusViewModel.instance.setSelectedTool(1)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immA?.openSubPanel(immA.labelSubPanel)
+                                PanelManager.instance.openSubPanel(PanelManager.instance.labelSubPanel)
                             }
                         )
 
@@ -178,7 +181,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 2) FocusViewModel.instance.setSelectedTool(2)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immA?.openSubPanel(immA.arrowSubPanel)
+                                PanelManager.instance.openSubPanel(PanelManager.instance.arrowSubPanel)
                             }
                         )
 
@@ -189,7 +192,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 3) FocusViewModel.instance.setSelectedTool(3)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immA?.openSubPanel(immA.boardSubPanel)
+                                PanelManager.instance.openSubPanel(PanelManager.instance.boardSubPanel)
                             }
                         )
 
@@ -200,7 +203,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 4) FocusViewModel.instance.setSelectedTool(4)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immA?.openSubPanel(immA.shapeSubPanel)
+                                PanelManager.instance.openSubPanel(PanelManager.instance.shapeSubPanel)
                             }
                         )
 
@@ -211,7 +214,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 5) FocusViewModel.instance.setSelectedTool(5)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immA?.openSubPanel(immA.stickerSubPanel)
+                                PanelManager.instance.openSubPanel(PanelManager.instance.stickerSubPanel)
                             }
                         )
 
@@ -222,7 +225,7 @@ fun ToolbarPanel() {
                             onClick = {
                                 if (selectedTool != 6) FocusViewModel.instance.setSelectedTool(6)
                                 else FocusViewModel.instance.setSelectedTool(-1)
-                                immA?.openSubPanel(immA.timerSubPanel)
+                                PanelManager.instance.openSubPanel(PanelManager.instance.timerSubPanel)
                             }
                         )
                     }

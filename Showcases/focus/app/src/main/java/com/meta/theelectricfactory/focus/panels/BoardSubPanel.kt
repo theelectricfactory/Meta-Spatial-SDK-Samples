@@ -19,15 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.theelectricfactory.focus.ui.FocusTheme
-import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 
 @Composable
 fun BoardSubPanel() {
-
-    var immA = ImmersiveActivity.getInstance()
-
     return FocusTheme {
         Box(
             Modifier
@@ -47,10 +44,10 @@ fun BoardSubPanel() {
                     text = "Boards"
                 )
 
-                ToolbarSubpanelButton( R.drawable.button_board1, onClick = {immA?.CreateBoard(0)})
-                ToolbarSubpanelButton( R.drawable.button_board2, onClick = {immA?.CreateBoard(1)})
-                ToolbarSubpanelButton( R.drawable.button_board3, onClick = {immA?.CreateBoard(2)})
-                ToolbarSubpanelButton( R.drawable.button_board4, onClick = {immA?.CreateBoard(3)})
+                ToolbarSubpanelButton( R.drawable.button_board1, onClick = { ToolManager.instance.createBoard(0)})
+                ToolbarSubpanelButton( R.drawable.button_board2, onClick = { ToolManager.instance.createBoard(1)})
+                ToolbarSubpanelButton( R.drawable.button_board3, onClick = { ToolManager.instance.createBoard(2)})
+                ToolbarSubpanelButton( R.drawable.button_board4, onClick = { ToolManager.instance.createBoard(3)})
             }
         }
     }

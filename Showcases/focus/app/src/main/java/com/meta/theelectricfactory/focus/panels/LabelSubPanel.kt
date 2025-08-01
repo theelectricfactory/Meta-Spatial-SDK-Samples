@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.theelectricfactory.focus.ui.FocusTheme
-import com.meta.theelectricfactory.focus.ImmersiveActivity
+import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.data.Label
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 import com.meta.theelectricfactory.focus.ui.focusFont
@@ -34,9 +34,6 @@ import com.meta.theelectricfactory.focus.data.stateLabels
 
 @Composable
 fun LabelSubPanel() {
-
-    var immA = ImmersiveActivity.getInstance()
-
     return FocusTheme {
         Box(
             Modifier
@@ -55,12 +52,12 @@ fun LabelSubPanel() {
                     text = "Labels"
                 )
 
-                LabelButton(stateLabels[0], onClick = {immA?.CreateLabelTool(0)})
-                LabelButton(stateLabels[1], onClick = {immA?.CreateLabelTool(1)})
-                LabelButton(stateLabels[2], onClick = {immA?.CreateLabelTool(2)})
-                LabelButton(priorityLabels[0], onClick = {immA?.CreateLabelTool(3)})
-                LabelButton(priorityLabels[1], onClick = {immA?.CreateLabelTool(4)})
-                LabelButton(priorityLabels[2], onClick =  {immA?.CreateLabelTool(5)})
+                LabelButton(stateLabels[0], onClick = { ToolManager.instance.createLabelTool(0)})
+                LabelButton(stateLabels[1], onClick = { ToolManager.instance.createLabelTool(1)})
+                LabelButton(stateLabels[2], onClick = { ToolManager.instance.createLabelTool(2)})
+                LabelButton(priorityLabels[0], onClick = { ToolManager.instance.createLabelTool(3)})
+                LabelButton(priorityLabels[1], onClick = { ToolManager.instance.createLabelTool(4)})
+                LabelButton(priorityLabels[2], onClick =  { ToolManager.instance.createLabelTool(5)})
             }
         }
     }

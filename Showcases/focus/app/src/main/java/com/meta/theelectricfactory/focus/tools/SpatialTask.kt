@@ -25,10 +25,11 @@ import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.theelectricfactory.focus.AssetType
 import com.meta.theelectricfactory.focus.AttachableComponent
 import com.meta.theelectricfactory.focus.ImmersiveActivity
+import com.meta.theelectricfactory.focus.managers.PanelManager
+import com.meta.theelectricfactory.focus.managers.Task
 import com.meta.theelectricfactory.focus.ToolComponent
-import com.meta.theelectricfactory.focus.panels.Task
+import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.panels.TaskCard
-import com.meta.theelectricfactory.focus.panels.panelRegistration
 import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
 import com.meta.theelectricfactory.focus.utils.addDeleteButton
@@ -56,7 +57,7 @@ class SpatialTask(
 
         // Register the panel
         immA?.registerPanel(
-            panelRegistration(id, 0.24f, 0.15f) {
+            PanelManager.instance.panelRegistration(id, 0.24f, 0.15f) {
                 FocusTheme {
                     Box(
                         modifier = Modifier
@@ -97,7 +98,7 @@ class SpatialTask(
             if (!taskPanelEntity.hasComponent<TransformParent>() ||
                 (taskPanelEntity.hasComponent<TransformParent>() && taskPanelEntity.getComponent<TransformParent>().entity == Entity.nullEntity())) {
 
-                immA?.linkToolsWithParentBoards(taskPanelEntity)
+                ToolManager.instance.linkToolsWithParentBoards(taskPanelEntity)
             }
         }
 

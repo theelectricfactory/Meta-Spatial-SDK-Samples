@@ -26,17 +26,14 @@ import com.meta.spatial.uiset.theme.LocalShapes
 import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
-import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.ui.FocusShapes
 import com.meta.theelectricfactory.focus.ui.focusShapes
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 
 @Composable
 fun StickySubPanel() {
-
-    var immA = ImmersiveActivity.getInstance()
-
     return FocusTheme {
         Box(
             Modifier
@@ -54,12 +51,12 @@ fun StickySubPanel() {
                     text = "Sticky Notes"
                 )
 
-                StickyButton("yellow", FocusColors.yellowStickyNote, {immA?.CreateStickyNote(0)})
-                StickyButton("green", FocusColors.greenStickyNote, {immA?.CreateStickyNote(1)})
-                StickyButton("pink", FocusColors.pinkStickyNote, {immA?.CreateStickyNote(2)})
-                StickyButton("orange", FocusColors.orangeStickyNote, {immA?.CreateStickyNote(3)})
-                StickyButton("blue", FocusColors.blueStickyNote, {immA?.CreateStickyNote(4)})
-                StickyButton("purple", FocusColors.purpleStickyNote, {immA?.CreateStickyNote(5)})
+                StickyButton("yellow", FocusColors.yellowStickyNote, { ToolManager.instance.createStickyNote(0)})
+                StickyButton("green", FocusColors.greenStickyNote, { ToolManager.instance.createStickyNote(1)})
+                StickyButton("pink", FocusColors.pinkStickyNote, { ToolManager.instance.createStickyNote(2)})
+                StickyButton("orange", FocusColors.orangeStickyNote, { ToolManager.instance.createStickyNote(3)})
+                StickyButton("blue", FocusColors.blueStickyNote, { ToolManager.instance.createStickyNote(4)})
+                StickyButton("purple", FocusColors.purpleStickyNote, { ToolManager.instance.createStickyNote(5)})
             }
         }
     }

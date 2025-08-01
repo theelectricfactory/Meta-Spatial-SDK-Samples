@@ -3,7 +3,6 @@
 package com.meta.theelectricfactory.focus.utils
 
 import android.app.Activity
-import android.os.Handler
 import android.util.Log
 import com.meta.spatial.core.Entity
 import com.meta.spatial.core.Pose
@@ -24,6 +23,7 @@ import com.meta.spatial.toolkit.TransformParent
 import com.meta.spatial.toolkit.Visible
 import com.meta.theelectricfactory.focus.AssetType
 import com.meta.theelectricfactory.focus.ImmersiveActivity
+import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.ToolComponent
 import com.meta.theelectricfactory.focus.data.arrowHeightArray
 import com.meta.theelectricfactory.focus.data.boardHeightArray
@@ -186,7 +186,7 @@ fun getHeadPose(): Pose {
 fun placeInFront(entity: Entity?, offset: Vector3 = Vector3(0f), bigPanel: Boolean = false) {
     val headPose: Pose = getHeadPose()
 
-    val isToolbar = entity!! == ImmersiveActivity.getInstance()?.toolbarPanel
+    val isToolbar = entity!! == PanelManager.instance.toolbarPanel
 
     // We treat toolbar and big panels differently from other objects.
     val height: Float = if (isToolbar) 0.35f else 0.1f
@@ -239,11 +239,13 @@ fun deleteObject(
     deleteFromDB: Boolean = false,
     cleaningProject: Boolean = false
 ) {
+    Log.i("Focus", "Focus> Deleting object: ${entity?.getComponent<ToolComponent>()?.uuid}")
+
     val immA = ImmersiveActivity.getInstance()
     val position = entity!!.getComponent<Transform>().transform.t
 
     if (immA?.currentObjectSelected != null && immA?.currentObjectSelected!!.equals(entity)) {
-        immA?.currentObjectSelected = null
+        immA.currentObjectSelected = null
     }
 
     // deleteButton is detached from the object
@@ -281,5 +283,5 @@ fun deleteObject(
         }
     }
     entity.destroy()
-    if (!cleaningProject) immA?.scene?.playSound(immA?.deleteSound!!, position, 1f)
+    if (!cleaningProject) immA?.scene?.playSound(immA.deleteSound, position, 1f)
 }

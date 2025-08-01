@@ -49,6 +49,7 @@ import com.meta.spatial.uiset.tooltip.SpatialTooltipContent
 import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
 import com.meta.theelectricfactory.focus.ImmersiveActivity
+import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.fragments.SecondFragment
 import com.meta.theelectricfactory.focus.ui.FocusColorSchemes
@@ -266,7 +267,7 @@ fun saveCurrentProject(
     }
 
     ImmersiveActivity.getInstance()?.saveProjectSettings(envSelected == 3, projectNameInput.value)
-    ImmersiveActivity.getInstance()?.homePanel?.setComponent(Visible(false))
+    PanelManager.instance.homePanel.setComponent(Visible(false))
 }
 
 @Preview(

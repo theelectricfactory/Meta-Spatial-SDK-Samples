@@ -65,9 +65,10 @@ import androidx.compose.ui.unit.sp
 import com.meta.spatial.uiset.button.PrimaryIconButton
 import com.meta.spatial.uiset.button.SecondaryCircleButton
 import com.meta.spatial.uiset.tooltip.SpatialTooltipContent
+import com.meta.theelectricfactory.focus.managers.AIManager
 import com.meta.theelectricfactory.focus.ui.FocusColors
 import com.meta.theelectricfactory.focus.ui.FocusTheme
-import com.meta.theelectricfactory.focus.ImmersiveActivity
+import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.tools.WebView
 import com.meta.theelectricfactory.focus.ui.FocusColorSchemes
@@ -83,7 +84,6 @@ data class Message(val text: String, val isUser: Boolean)
 @Composable
 fun AIPanel() {
 
-    var immA = ImmersiveActivity.getInstance()
     var messageInput = remember { mutableStateOf("") }
     var messagesList = remember { mutableStateListOf<Message>() }
     var stickyAvailable = remember { mutableStateOf(false) }
@@ -127,7 +127,7 @@ fun AIPanel() {
                 }
                 SecondaryCircleButton(
                     onClick = {
-                        immA?.ShowAIPanel(false)
+                        PanelManager.instance.showAIPanel(false)
                     },
                     icon = {
                         Icon(
@@ -187,7 +187,7 @@ fun AIPanel() {
                                         tint = Color.Unspecified
                                     )},
                                     onClick = {
-                                        immA?.summarize(immA.lastAIResponse)
+                                        AIManager.instance.summarize(AIManager.instance.lastAIResponse)
                                         stickyAvailable.value = false
                                     },
                                     isEnabled = stickyAvailable.value
@@ -292,7 +292,7 @@ fun AIPanel() {
 }
 
 fun activeLoadingState(state: Boolean, sendButtonLoading: MutableState<Boolean>, sendButtonIcon: MutableIntState) {
-    ImmersiveActivity.getInstance()?.waitingForAI = state
+    AIManager.instance.waitingForAI = state
     sendButtonLoading.value = state
     sendButtonIcon.intValue = if (state) R.drawable.loading else R.drawable.send
 }
@@ -309,11 +309,11 @@ fun onSendMessage(
             0,
             Message(messageInput.value, true)
         )
-        ImmersiveActivity.getInstance()?.askToAI(messageInput.value, {
+        AIManager.instance.askToAI(messageInput.value, {
             messagesList.add(
                 0,
                 Message(
-                    ImmersiveActivity.getInstance()!!.lastAIResponse,
+                    AIManager.instance.lastAIResponse,
                     false
                 )
             )

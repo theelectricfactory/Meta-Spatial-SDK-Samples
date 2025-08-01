@@ -19,15 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.theelectricfactory.focus.ui.FocusTheme
-import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 
 @Composable
 fun ArrowSubPanel() {
-
-    var immA = ImmersiveActivity.getInstance()
-
     return FocusTheme {
         Box(
             Modifier
@@ -47,12 +44,12 @@ fun ArrowSubPanel() {
                     text = "Arrows"
                 )
 
-                ToolbarSubpanelButton( R.drawable.button_arrow1, onClick = {immA?.CreateArrowTool(0)})
-                ToolbarSubpanelButton( R.drawable.button_arrow2, onClick = {immA?.CreateArrowTool(1)})
-                ToolbarSubpanelButton( R.drawable.button_arrow3, onClick = {immA?.CreateArrowTool(2)})
-                ToolbarSubpanelButton( R.drawable.button_arrow4, onClick = {immA?.CreateArrowTool(3)})
-                ToolbarSubpanelButton( R.drawable.button_arrow5, onClick = {immA?.CreateArrowTool(4)})
-                ToolbarSubpanelButton( R.drawable.button_arrow6, onClick = {immA?.CreateArrowTool(5)})
+                ToolbarSubpanelButton( R.drawable.button_arrow1, onClick = { ToolManager.instance.createArrowTool(0)})
+                ToolbarSubpanelButton( R.drawable.button_arrow2, onClick = { ToolManager.instance.createArrowTool(1)})
+                ToolbarSubpanelButton( R.drawable.button_arrow3, onClick = { ToolManager.instance.createArrowTool(2)})
+                ToolbarSubpanelButton( R.drawable.button_arrow4, onClick = { ToolManager.instance.createArrowTool(3)})
+                ToolbarSubpanelButton( R.drawable.button_arrow5, onClick = { ToolManager.instance.createArrowTool(4)})
+                ToolbarSubpanelButton( R.drawable.button_arrow6, onClick = { ToolManager.instance.createArrowTool(5)})
             }
         }
     }

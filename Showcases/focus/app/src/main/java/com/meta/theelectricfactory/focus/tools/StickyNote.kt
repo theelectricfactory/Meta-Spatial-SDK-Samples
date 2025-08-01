@@ -12,10 +12,10 @@ import com.meta.spatial.toolkit.createPanelEntity
 import com.meta.theelectricfactory.focus.AssetType
 import com.meta.theelectricfactory.focus.AttachableComponent
 import com.meta.theelectricfactory.focus.ImmersiveActivity
+import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.data.StickyColor
 import com.meta.theelectricfactory.focus.ToolComponent
 import com.meta.theelectricfactory.focus.panels.StickyNotePanel
-import com.meta.theelectricfactory.focus.panels.panelRegistration
 import com.meta.theelectricfactory.focus.utils.addDeleteButton
 import com.meta.theelectricfactory.focus.utils.getDisposableID
 import com.meta.theelectricfactory.focus.utils.getNewUUID
@@ -54,7 +54,7 @@ class StickyNote(
 
         // Register the panel
         immA?.registerPanel(
-            panelRegistration(id, 0.14f, 0.14f) {
+            PanelManager.instance.panelRegistration(id, 0.14f, 0.14f) {
                 StickyNotePanel(
                     uuid = uuid,
                     message = message,

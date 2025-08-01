@@ -11,6 +11,7 @@ import com.meta.spatial.toolkit.Controller
 import com.meta.spatial.toolkit.Transform
 import com.meta.spatial.toolkit.Visible
 import com.meta.theelectricfactory.focus.ImmersiveActivity
+import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.utils.getHeadPose
 import com.meta.theelectricfactory.focus.utils.placeInFront
@@ -66,7 +67,7 @@ class GeneralSystem() : SystemBase() {
             val controller = entity.getComponent<Controller>()
             if ((controller.buttonState.inv() and controller.changedButtons and ButtonBits.ButtonB) != 0 ||
                 (controller.buttonState.inv() and controller.changedButtons and ButtonBits.ButtonY) != 0) {
-                    placeInFront(immA?.toolbarPanel)
+                    placeInFront(PanelManager.instance.toolbarPanel)
             }
         }
     }

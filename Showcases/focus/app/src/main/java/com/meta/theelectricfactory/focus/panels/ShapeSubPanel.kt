@@ -19,15 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.theelectricfactory.focus.ui.FocusTheme
-import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 
 @Composable
 fun ShapeSubPanel() {
-
-    var immA = ImmersiveActivity.getInstance()
-
     return FocusTheme {
         Box(
             Modifier
@@ -47,12 +44,12 @@ fun ShapeSubPanel() {
                     text = "Shapes"
                 )
 
-                ToolbarSubpanelButton( R.drawable.shape1, onClick = {immA?.CreateShape(0)})
-                ToolbarSubpanelButton( R.drawable.shape2, onClick = {immA?.CreateShape(1)})
-                ToolbarSubpanelButton( R.drawable.shape3, onClick = {immA?.CreateShape(2)})
-                ToolbarSubpanelButton( R.drawable.shape4, onClick = {immA?.CreateShape(3)})
-                ToolbarSubpanelButton( R.drawable.shape5, onClick = {immA?.CreateShape(4)})
-                ToolbarSubpanelButton( R.drawable.shape6, onClick = {immA?.CreateShape(5)})
+                ToolbarSubpanelButton( R.drawable.shape1, onClick = { ToolManager.instance.createShape(0)})
+                ToolbarSubpanelButton( R.drawable.shape2, onClick = { ToolManager.instance.createShape(1)})
+                ToolbarSubpanelButton( R.drawable.shape3, onClick = { ToolManager.instance.createShape(2)})
+                ToolbarSubpanelButton( R.drawable.shape4, onClick = { ToolManager.instance.createShape(3)})
+                ToolbarSubpanelButton( R.drawable.shape5, onClick = { ToolManager.instance.createShape(4)})
+                ToolbarSubpanelButton( R.drawable.shape6, onClick = { ToolManager.instance.createShape(5)})
             }
         }
     }

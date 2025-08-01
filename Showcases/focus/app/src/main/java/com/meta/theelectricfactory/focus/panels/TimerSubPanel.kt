@@ -19,15 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.meta.spatial.uiset.theme.SpatialTheme
 import com.meta.theelectricfactory.focus.ui.FocusTheme
-import com.meta.theelectricfactory.focus.ImmersiveActivity
 import com.meta.theelectricfactory.focus.R
+import com.meta.theelectricfactory.focus.managers.ToolManager
 import com.meta.theelectricfactory.focus.utils.FOCUS_DP
 
 @Composable
 fun TimerSubPanel() {
-
-    var immA = ImmersiveActivity.getInstance()
-
     return FocusTheme {
         Box(
             Modifier
@@ -47,12 +44,12 @@ fun TimerSubPanel() {
                     text = "Timer"
                 )
 
-                ToolbarSubpanelButton( R.drawable.timer1, 80.dp, onClick = {immA?.CreateTimer(0)})
-                ToolbarSubpanelButton( R.drawable.timer2, 80.dp, onClick = {immA?.CreateTimer(1)})
-                ToolbarSubpanelButton( R.drawable.timer3, 80.dp, onClick = {immA?.CreateTimer(2)})
-                ToolbarSubpanelButton( R.drawable.timer4, 80.dp, onClick = {immA?.CreateTimer(3)})
-                ToolbarSubpanelButton( R.drawable.timer5, 80.dp, onClick = {immA?.CreateTimer(4)})
-                ToolbarSubpanelButton( R.drawable.timer6, 80.dp, onClick = {immA?.CreateTimer(5)})
+                ToolbarSubpanelButton( R.drawable.timer1, 80.dp, onClick = { ToolManager.instance.createTimer(0)})
+                ToolbarSubpanelButton( R.drawable.timer2, 80.dp, onClick = { ToolManager.instance.createTimer(1)})
+                ToolbarSubpanelButton( R.drawable.timer3, 80.dp, onClick = { ToolManager.instance.createTimer(2)})
+                ToolbarSubpanelButton( R.drawable.timer4, 80.dp, onClick = { ToolManager.instance.createTimer(3)})
+                ToolbarSubpanelButton( R.drawable.timer5, 80.dp, onClick = { ToolManager.instance.createTimer(4)})
+                ToolbarSubpanelButton( R.drawable.timer6, 80.dp, onClick = { ToolManager.instance.createTimer(5)})
             }
         }
     }

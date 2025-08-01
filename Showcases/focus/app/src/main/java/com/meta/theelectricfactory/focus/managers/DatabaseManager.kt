@@ -1,6 +1,6 @@
 // (c) Meta Platforms, Inc. and affiliates. Confidential and proprietary.
 
-package com.meta.theelectricfactory.focus.db
+package com.meta.theelectricfactory.focus.managers
 
 import android.content.ContentValues
 import android.content.Context
