@@ -51,11 +51,25 @@ class BoardParentingSystem : SystemBase() {
             val uuid = grabbedChild.getComponent<ToolComponent>().uuid
             val assetType = grabbedChild.getComponent<ToolComponent>().type
 
-            // Detect if object has to be parented to the board
+            // Detect if object is close to a board
             if ((!grabbedChild.hasComponent<TransformParent>() ||
                 grabbedChild.hasComponent<TransformParent>() && grabbedChild.getComponent<TransformParent>().entity != board) &&
                 distance < 0.08f) {
 
+                if (grabbedChild.hasComponent<TransformParent>() &&
+                    grabbedChild.getComponent<TransformParent>().entity != Entity.nullEntity() &&
+                    grabbedChild.getComponent<TransformParent>().entity != board) {
+
+                    val currentParentVertices = getMeshBoundsAbsolutePosition(grabbedChild.getComponent<TransformParent>().entity)
+                    val distanceToCurrentParent = pointToRectangleDistance(getAbsoluteTransform(grabbedChild).t, currentParentVertices[0], currentParentVertices[1], currentParentVertices[2], currentParentVertices[3])
+
+                    // If the object is still close to its current parent, do not change parent
+                    if (distanceToCurrentParent < 0.08f) {
+                        break
+                    }
+                }
+
+                // Parent object with board
                 val parentUuid = board.getComponent<ToolComponent>().uuid
 
                 grabbedChild.setComponent(TransformParent(board))
