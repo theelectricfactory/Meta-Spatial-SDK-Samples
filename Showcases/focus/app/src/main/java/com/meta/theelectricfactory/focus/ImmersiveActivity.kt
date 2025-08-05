@@ -257,7 +257,7 @@ class ImmersiveActivity : AppSystemActivity() {
         deleteButton =
             Entity.create(
                 Mesh(Uri.parse("mesh://box")),
-                Box(Vector3(-0.02f, -0.02f, 0f), Vector3(0.02f, 0.02f, 0f)),
+                Box(Vector3(-0.015f, -0.015f, 0f), Vector3(0.015f, 0.015f, 0f)),
                 Transform(Pose(Vector3(0f))),
                 IsdkPanelDimensions(Vector2(0.04f, 0.04f)),
                 Material().apply {

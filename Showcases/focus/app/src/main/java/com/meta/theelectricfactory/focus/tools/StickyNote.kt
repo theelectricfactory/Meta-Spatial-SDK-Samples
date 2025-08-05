@@ -67,7 +67,7 @@ class StickyNote(
         )
 
         // We add it a ToolComponent to be able to identify it and get the type and uuid of the entity
-        sticky.setComponent(ToolComponent(uuid, AssetType.STICKY_NOTE, Vector3(0f, 0.1f, -0.005f)))
+        sticky.setComponent(ToolComponent(uuid, AssetType.STICKY_NOTE, Vector3(0f, 0.115f, -0.005f)))
         // We add an AttachableComponent to the object to be able to "stick" it to the boards
         sticky.setComponent(AttachableComponent(parentUuid = parentUuid))
     }

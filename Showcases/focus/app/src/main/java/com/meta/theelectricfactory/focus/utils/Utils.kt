@@ -18,11 +18,13 @@ import com.meta.spatial.runtime.InputListener
 import com.meta.spatial.runtime.PanelSceneObject
 import com.meta.spatial.runtime.SceneObject
 import com.meta.spatial.toolkit.AvatarAttachment
+import com.meta.spatial.toolkit.Material
 import com.meta.spatial.toolkit.Transform
 import com.meta.spatial.toolkit.TransformParent
 import com.meta.spatial.toolkit.Visible
 import com.meta.theelectricfactory.focus.AssetType
 import com.meta.theelectricfactory.focus.ImmersiveActivity
+import com.meta.theelectricfactory.focus.R
 import com.meta.theelectricfactory.focus.managers.PanelManager
 import com.meta.theelectricfactory.focus.ToolComponent
 import com.meta.theelectricfactory.focus.data.arrowHeightArray
@@ -230,6 +232,23 @@ fun selectElement(ent: Entity) {
                     billboardOrientationEuler.x,
                     billboardOrientationEuler.y,
                     billboardOrientationEuler.z))))
+
+    // Change icon if the object is a task
+    if (ent.getComponent<ToolComponent>().type == AssetType.TASK) {
+        ImmersiveActivity.getInstance()?.deleteButton?.setComponent(
+            Material().apply {
+            baseTextureAndroidResourceId = R.drawable.close_task
+            alphaMode = 1
+            unlit = true
+        })
+    } else {
+        ImmersiveActivity.getInstance()?.deleteButton?.setComponent(
+            Material().apply {
+                baseTextureAndroidResourceId = R.drawable.delete
+                alphaMode = 1
+                unlit = true
+            })
+    }
     ImmersiveActivity.getInstance()?.deleteButton?.setComponent(TransformParent(ent))
     ImmersiveActivity.getInstance()?.deleteButton?.setComponent(Visible(true))
 }
