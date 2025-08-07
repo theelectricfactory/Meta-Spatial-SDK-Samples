@@ -145,6 +145,8 @@ This project makes use of the following plugins and software:
 
 **Meta Spatial SDK**
 
+[**Jetpack Compose**](https://developer.android.com/compose)
+
 [**Gson**](https://github.com/google/gson)
 
 [**OkHttp**](https://github.com/square/okhttp)
